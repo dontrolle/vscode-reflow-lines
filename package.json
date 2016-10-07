@@ -1,7 +1,7 @@
 {
     "name": "reflow-paragraph",
     "displayName": "Reflow paragraph",
-    "description": "Format lines in paragraph to a preffered line-length.",
+    "description": "Format lines in paragraph to a preferred line-length.",
     "version": "1.0.0",
     "publisher": "TroelsDamgaard",
     "engines": {

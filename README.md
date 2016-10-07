@@ -15,7 +15,7 @@ This extension contributes the following settings:
 
 ## keyboard shortcuts
 
-Reflow paragraph using `alt+q`.
+Invoke reflow paragraph using `alt+q` (default).
 
 ## Known Issues
 

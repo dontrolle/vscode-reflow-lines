@@ -2,17 +2,8 @@
 import * as vscode from 'vscode';
 
 /* TODOS
-* clean up
-    * remove (most) traces of generated tutorial
-    * worst crap-programming
-
-* write brief first documentation
-* readme.md
-
 * configurable:
-    * wrapAt 
     * insert linebreaks as-you-type
-
 */
 
 export function activate(context: vscode.ExtensionContext) {
@@ -29,16 +20,12 @@ export function activate(context: vscode.ExtensionContext) {
         const selection = editor.selection;
         const position = editor.selection.active;
 
-        var lineNo = position.line;
-        //console.log(`lineNo: ${lineNo}`);
-
         var paragraphStartLineNo = position.line;
         while(paragraphStartLineNo - 1 > 0 && !editor.document.lineAt(paragraphStartLineNo - 1).isEmptyOrWhitespace)
         {
             paragraphStartLineNo-=1;
         }
         // paragraphStartLineNo now points to the first line of the paragraph or the first line in the document.
-        //console.log(`par-start: ${paragraphStartLineNo}.`);
 
         var maxLineNo = editor.document.lineCount;
 
@@ -48,9 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
             paragraphEndLineNo+=1;
         }
         // paragraphEndLineNo now points to the last line or the last line of the paragraph.
-        //console.log(`par-end: ${paragraphEndLineNo}`);
 
-        // TODO a bit clumsy, and doesn't include final line-separator... 
         var len = editor.document.lineAt(paragraphEndLineNo).text.length;
         var range = new vscode.Range(paragraphStartLineNo, 0, paragraphEndLineNo, len);
         var text = editor.document.getText(range);
@@ -84,7 +69,6 @@ export function activate(context: vscode.ExtensionContext) {
         // newParagraph is constructed with \n for line-endings; 
         // textEditorEdit.replace will insert the correct environment-specific line-endings 
         var newParagraph = newLines.join("\n");
-        // console.log(newParagraph);
 
         var applied = editor.edit(
             function (textEditorEdit) {

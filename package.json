@@ -15,8 +15,7 @@
         "text",
 		"format",
         "reflow",
-		"pretty",
-		"beautify"
+        "wrap"
 	],    
 	"repository": {
 		"type": "git",

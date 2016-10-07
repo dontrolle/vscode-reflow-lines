@@ -24,8 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
             return; // No open text editor
         }
 
-        // TODO should be configurable
-        var wrapAt = 80;
+        var wrapAt = GetPreferredLineLength();
 
         const selection = editor.selection;
         const position = editor.selection.active;
@@ -102,4 +101,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+}
+
+function GetPreferredLineLength() : number
+{
+    var wsConfig = vscode.workspace.getConfiguration('reflow');
+    var preferredLineLength = wsConfig.get("preferredLineLength", 80);
+    return preferredLineLength;
 }

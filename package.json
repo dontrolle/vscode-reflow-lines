@@ -27,6 +27,18 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Reflow paragraph configuration",
+            "properties": {
+                "reflow.preferredLineLength" :{
+                    "type": "number",
+                    "default": 80,
+                    "description": "Preferred line length for reflowing paragraph.",
+                    "minimum": 0
+                }
+            }
+        },
         "commands": [{
             "command": "extension.reflowParagraph",
             "title": "Reflow paragraph"

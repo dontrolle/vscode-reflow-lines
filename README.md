@@ -5,19 +5,13 @@ length.
 
 This extension defaults to reflowing lines to be no more than 80 characters
 long. The preferred line length may be overriden using the config value of
-**TODO** *editor.preferredLineLength*.
+`reflow.preferredLineLength`.
 
 ## Extension Settings
 
-**TODO**
-
-Include if your extension adds any VS Code settings through the
-`contributes.configuration` extension point. For example:
-
 This extension contributes the following settings:
 
-* `extension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `reflow.preferredLineLength`: Set the preferred line length for reflowing paragraph (default: 80).
 
 ## Known Issues
 

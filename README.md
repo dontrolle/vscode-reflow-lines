@@ -1,11 +1,8 @@
 # Reflow paragraph
 
-Format the current paragraph to have lines no longer than your preferred line
-length, using `alt+q` (may be overriden in user-specific keyboard-bindings.) 
+Format the current paragraph to have lines no longer than your preferred line length, using `alt+q` (may be overriden in user-specific keyboard-bindings.)
 
-This extension defaults to reflowing lines to be no more than 80 characters
-long. The preferred line length may be overriden using the config value of
-`reflow.preferredLineLength`.
+This extension defaults to reflowing lines to be no more than 80 characters long. The preferred line length may be overriden using the config value of `reflow.preferredLineLength`.
 
 ## Extension Settings
 

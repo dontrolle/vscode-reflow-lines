@@ -60,14 +60,14 @@ export function activate(context: vscode.ExtensionContext) {
             }
         });
 
-        // the final line will be in curLine  
+        // the final line will be in curLine
         if(curLine.length > 0)
         {
             newLines.push(curLine);
         }
 
-        // newParagraph is constructed with \n for line-endings; 
-        // textEditorEdit.replace will insert the correct environment-specific line-endings 
+        // newParagraph is constructed with \n for line-endings;
+        // textEditorEdit.replace will insert the correct environment-specific line-endings
         var newParagraph = newLines.join("\n");
 
         var applied = editor.edit(
@@ -75,9 +75,9 @@ export function activate(context: vscode.ExtensionContext) {
                 textEditorEdit.replace(range, newParagraph)
             }
         );
-        
+
         // reset selection (TODO may be contraintuitive... maybe rather reset to single position, always?)
-        editor.selection = selection;        
+        editor.selection = selection;
     });
 
    context.subscriptions.push(disposable);

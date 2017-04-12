@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
         const position = editor.selection.active;
 
         let paragraphStartLineNo = position.line;
-        while (paragraphStartLineNo - 1 > 0 && !editor.document.lineAt(paragraphStartLineNo - 1).isEmptyOrWhitespace) {
+        while (!IsParagraphStart(editor, paragraphStartLineNo)) {
             paragraphStartLineNo -= 1;
         }
         // paragraphStartLineNo now points to the first line of the paragraph or the first line in the document
@@ -31,8 +31,8 @@ export function activate(context: vscode.ExtensionContext) {
         let maxLineNo = editor.document.lineCount;
 
         let paragraphEndLineNo = position.line;
-        while (paragraphEndLineNo + 1 < maxLineNo && !editor.document.lineAt(paragraphEndLineNo + 1).isEmptyOrWhitespace) {
-            paragraphEndLineNo += 1;
+        while (!IsParagraphEnd(editor, maxLineNo, paragraphEndLineNo)) {
+            paragraphEndLineNo += 1;            
         }
         // paragraphEndLineNo now points to the last line or the last line of the paragraph
 
@@ -78,6 +78,13 @@ export function activate(context: vscode.ExtensionContext) {
             }
         });
 
+
+        // if we are in a markdown file, and the original text ended with 2 spaces, restore it
+        if (editor.document.fileName.endsWith(".md") && text.endsWith("  ")) {
+            curLine += "  ";
+        }  
+
+
         // the final line will be in curLine
         if (curLine.length > 0) {
             newLines.push(curLine);
@@ -109,4 +116,97 @@ function GetPreferredLineLength(wsConfig: vscode.WorkspaceConfiguration): number
 
 function PreserveIndent(wsConfig: vscode.WorkspaceConfiguration): boolean {
     return wsConfig.get("preserveIndent", true);
+}
+
+function IsParagraphStart(editor: vscode.TextEditor, lineNo: number): boolean {
+  
+    if (lineNo - 1 <= 0) {
+        return true;
+    }
+
+    let currLine = editor.document.lineAt(lineNo);
+    let prevLine = editor.document.lineAt(lineNo - 1);
+
+    if (prevLine.isEmptyOrWhitespace) {
+        return true;
+    }
+
+    // if we are not in a markdown file, bail out
+    if (!editor.document.fileName.endsWith(".md")) {
+        return false;
+    }    
+
+    // BEGIN MARKDOWN SPECIFIC CHECKS   
+
+    // If the current line is empty, it is a start point
+    if (currLine.isEmptyOrWhitespace) {
+        return true;
+    }
+
+    // If the current line is a hash heading, the current line is a start point
+    if (IsMarkdownHeadingHash(currLine.text)) {
+        return true;
+    }
+
+    // If the previous line is a hash or dash heading, the current line is a start point
+    if (IsMarkdownHeadingHash(prevLine.text) || IsMarkdownHeadingDash(prevLine.text)) {
+        return true;
+    }
+
+    // If the previous line ends with two, spaces, it is a start point    
+    if (prevLine.text.endsWith("  ")) {
+        return true;
+    }
+
+    return false;
+}
+
+function IsParagraphEnd(editor: vscode.TextEditor, maxLineNo: number, lineNo: number): boolean {
+    if (lineNo + 1 > maxLineNo) {
+        return true;
+    }
+    
+    let currLine = editor.document.lineAt(lineNo);
+    let nextLine = editor.document.lineAt(lineNo + 1);
+
+    if (nextLine.isEmptyOrWhitespace) {
+        return true;
+    }
+
+    // if we are not in a markdown file, bail out
+    if (!editor.document.fileName.endsWith(".md")) {
+        return false;
+    }    
+
+    // BEGIN MARKDOWN SPECIFIC CHECKS 
+
+    // If the current line is empty, it is an end point
+    if (currLine.isEmptyOrWhitespace) {
+        return true;
+    }
+
+    // If the current line is a hash or dash heading, it is a end point
+    if (IsMarkdownHeadingHash(currLine.text) || IsMarkdownHeadingDash(currLine.text)) {
+        return true;
+    }
+
+    // If the next line is a hash heading, the current line is an endpoint
+    if (IsMarkdownHeadingHash(nextLine.text)) {
+        return true;
+    }
+
+    // If the current line ends with two, spaces, it is an end point    
+    if (currLine.text.endsWith("  ")) {
+        return true;
+    }
+
+    return false;
+
+}
+function IsMarkdownHeadingHash(text: string): boolean {
+    return text.startsWith("#") || text.startsWith("--");
+}
+
+function IsMarkdownHeadingDash(text: string): boolean {
+    return text.startsWith("==") || text.startsWith("--");
 }

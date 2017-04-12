@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         let paragraphEndLineNo = position.line;
         while (!IsParagraphEnd(editor, maxLineNo, paragraphEndLineNo)) {
-            paragraphEndLineNo += 1;            
+            paragraphEndLineNo += 1;
         }
         // paragraphEndLineNo now points to the last line or the last line of the paragraph
 
@@ -204,7 +204,7 @@ function IsParagraphEnd(editor: vscode.TextEditor, maxLineNo: number, lineNo: nu
 
 }
 function IsMarkdownHeadingHash(text: string): boolean {
-    return text.startsWith("#") || text.startsWith("--");
+    return text.startsWith("#");
 }
 
 function IsMarkdownHeadingDash(text: string): boolean {

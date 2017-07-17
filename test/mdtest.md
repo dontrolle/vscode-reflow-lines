@@ -1,8 +1,7 @@
 mdtest.md 
 =========
  
-This is a markdown file for testing the ReflowMarkdown extension and this
-first paragraph starts on line 4 and ends on line 7. Line 4 should be a
+This is a markdown file for testing the ReflowMarkdown extension and this first paragraph starts on line 4 and ends on line 7. Line 4 should be a
 paragraph start line, line 7 should be a paragraph end line, and lines 5 and 6
 should be neither because it is in the middle.
 

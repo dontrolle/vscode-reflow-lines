@@ -1,10 +1,15 @@
-# Reflow paragraph
+Reflow Markdown
+=================
 
-Format the current paragraph to have lines no longer than your preferred line length, using `alt+q` (may be overriden in user-specific keyboard-bindings.)
+Reflow Markdown is a Visual Studio Code Extension originally forked from the
+[Reflow paragraph](https://marketplace.visualstudio.com/items?itemName=TroelsDamgaard.reflow-paragraph) extension
+by [Troels Damgaard](https://github.com/dontrolle/vscode-reflow-lines).  Instead of targeting any line of text, however it focuses on Markdown files only and the specific formatting constructs specific to it such as paragraphs, headings, block quotes, and lists.  Testing of this extension is performed against  [GitLab Flavored Markdown](https://docs.gitlab.com/ce/user/markdown.html)
 
-This extension defaults to reflowing lines to be no more than 80 characters long. The preferred line length may be overriden using the config value of `reflow.preferredLineLength`. 
+Format the current heading, paragraph, list, or blockquote to have lines no longer than your preferred line length, using the `alt+q` shortcut or your own user-specific keyboard-binding.
 
-By default, preserves indent for paragraph, when reflowing. This behavior may be switched off, by setting the configuration option `reflow.preserveIndent` to `false`.  
+This extension defaults to reflowing lines to be no more than 80 characters long. The preferred line length may be overriden using the config value of `reflowMarkdown.preferredLineLength`. 
+
+By default, it preserves indent for paragraph, when reflowing. This behavior may be switched off, by setting the configuration option `reflowMarkdown.preserveIndent` to `false`.  
 
 ## Extension Settings
 
@@ -15,18 +20,12 @@ This extension contributes the following settings:
 
 ## keyboard shortcuts
 
-Invoke reflow paragraph using `alt+q` (default).
+Invoke a reflow using `alt+q` (default).
 
-## Known Issues
-
-None.
 
 ## Release Notes
 
-### 1.1.0
-
-Preserve indent for paragraph, when reflowing by default. Configurable as per above using `reflow.preserveIndent`.
-
 ### 1.0.0
 
-Initial release.
+- Initial release after forking from [Reflow paragraph](https://marketplace.visualstudio.com/items?itemName=TroelsDamgaard.reflow-paragraph)
+- Support for Markdown lists and blockquotes, including nested blockquotes.

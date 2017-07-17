@@ -1,7 +1,7 @@
 {
   "name": "reflow-markdown",
   "displayName": "Reflow Markdown",
-  "description": "Format lines in markdown paragraphs, blockquotes, lists, etc. to a preferred line-length.",
+  "description": "Format lines in markdown headers, paragraphs, blockquotes, lists, etc. to a preferred line-length.",
   "version": "1.0.0",
   "publisher": "marvhen",
   "icon": "src/icon.png",
@@ -20,39 +20,39 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dontrolle/vscode-reflow-lines"
+    "url": "https://github.com/marvhen/reflowmarkdown"
   },
   "activationEvents": [
-    "onCommand:extension.reflowParagraph"
+    "onCommand:extension.reflowMarkdown"
   ],
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Reflow paragraph configuration",
+      "title": "Reflow Markdown configuration",
       "properties": {
-        "reflow.preferredLineLength": {
+        "reflowMarkdown.preferredLineLength": {
           "type": "number",
           "default": 80,
-          "description": "Preferred line length for reflowing paragraph.",
+          "description": "Preferred line length for reflowed lines.",
           "minimum": 0
         },
-        "reflow.preserveIndent": {
+        "reflowMarkdown.preserveIndent": {
           "type": "boolean",
           "default": true,
-          "description": "Preserve paragraph indent when reflowing paragraph."
+          "description": "Preserve paragraph indent when reflowing lines."
         }
       }
     },
     "commands": [
       {
-        "command": "extension.reflowParagraph",
-        "title": "Reflow paragraph"
+        "command": "extension.reflowMarkdown",
+        "title": "Reflow Markdown"
       }
     ],
     "keybindings": [
       {
-        "command": "extension.reflowParagraph",
+        "command": "extension.reflowMarkdown",
         "key": "alt+q",
         "when": "editorTextFocus"
       }

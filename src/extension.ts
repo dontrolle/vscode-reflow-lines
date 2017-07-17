@@ -8,7 +8,7 @@ import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
 
-    let disposable = vscode.commands.registerCommand("extension.reflowParagraph", () => {
+    let disposable = vscode.commands.registerCommand("extension.reflowMarkdown", () => {
 
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 // if (1 === 1) { return ;}
 
 
-        let wsConfig = vscode.workspace.getConfiguration("reflow");
+        let wsConfig = vscode.workspace.getConfiguration("reflowMarkdown");
 
         let wrapAt = GetPreferredLineLength(wsConfig);
 

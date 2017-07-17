@@ -1,68 +1,74 @@
 {
-    "name": "reflow-paragraph",
-    "displayName": "Reflow paragraph",
-    "description": "Format lines in paragraph to a preferred line-length.",
-    "version": "1.1.0",
-    "publisher": "TroelsDamgaard",
-    "engines": {
-        "vscode": "^1.5.0"
-    },
-    "categories": [
-        "Other"
-    ],
-	"keywords": [
-		"markdown",
-        "text",
-		"format",
-        "reflow",
-        "wrap"
-	],    
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/dontrolle/vscode-reflow-lines"
-	},
-    "activationEvents": [
-        "onCommand:extension.reflowParagraph"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "configuration": {
-            "type": "object",
-            "title": "Reflow paragraph configuration",
-            "properties": {
-                "reflow.preferredLineLength" :{
-                    "type": "number",
-                    "default": 80,
-                    "description": "Preferred line length for reflowing paragraph.",
-                    "minimum": 0
-                },
-                "reflow.preserveIndent" : {
-                    "type" : "boolean",
-                    "default": true,
-                    "description" : "Preserve paragraph indent when reflowing paragraph."
-                }
-            }
+  "name": "reflow-markdown",
+  "displayName": "Reflow Markdown",
+  "description": "Format lines in markdown paragraphs, blockquotes, lists, etc. to a preferred line-length.",
+  "version": "1.0.0",
+  "publisher": "marvhen",
+  "icon": "src/icon.png",
+  "engines": {
+    "vscode": "^1.5.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "markdown",
+    "text",
+    "format",
+    "reflow",
+    "wrap"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dontrolle/vscode-reflow-lines"
+  },
+  "activationEvents": [
+    "onCommand:extension.reflowParagraph"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Reflow paragraph configuration",
+      "properties": {
+        "reflow.preferredLineLength": {
+          "type": "number",
+          "default": 80,
+          "description": "Preferred line length for reflowing paragraph.",
+          "minimum": 0
         },
-        "commands": [{
-            "command": "extension.reflowParagraph",
-            "title": "Reflow paragraph"
-        }],
-        "keybindings": [{
-            "command": "extension.reflowParagraph",
-            "key": "alt+q",
-            "when": "editorTextFocus"
-        }]
+        "reflow.preserveIndent": {
+          "type": "boolean",
+          "default": true,
+          "description": "Preserve paragraph indent when reflowing paragraph."
+        }
+      }
     },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    }
+    "commands": [
+      {
+        "command": "extension.reflowParagraph",
+        "title": "Reflow paragraph"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.reflowParagraph",
+        "key": "alt+q",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32",
+    "@types/assert-plus": "^1.0.3"
+  }
 }

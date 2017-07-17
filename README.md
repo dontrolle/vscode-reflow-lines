@@ -21,11 +21,3 @@ This extension contributes the following settings:
 ## keyboard shortcuts
 
 Invoke a reflow using `alt+q` (default).
-
-
-## Release Notes
-
-### 1.0.0
-
-- Initial release after forking from [Reflow paragraph](https://marketplace.visualstudio.com/items?itemName=TroelsDamgaard.reflow-paragraph)
-- Support for Markdown lists and blockquotes, including nested blockquotes.

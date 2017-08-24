@@ -2,7 +2,7 @@
 import * as vscode from "vscode";
 
 /* TODOS
-* configurable:
+* configurable:     
     * insert linebreaks as-you-type
 */
 
@@ -84,7 +84,11 @@ export function activate(context: vscode.ExtensionContext) {
 
         words.forEach(word => {
             if (word !== "") {
-                if (curLine.length + 1 + word.length >= curMaxLineLength) {
+
+                // if the current line length is already longer than the max length, push it to the new lines array
+                // OR if our word does NOT start with a left square bracket (i.e. is not a .md hyperlink) AND
+                // if adding it and a space would make the line longer than the max length, also push it to the new lines array
+                if (curLine.length >= curMaxLineLength || (word[0] != "[" && curLine.length + 1 + word.length >= curMaxLineLength)) {
                     newLines.push(curLine);
                     curLine = sei.indents.otherLines;
                 }
@@ -326,7 +330,7 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
     // back out into a shallower level.  Therefore, the start is only when the prevLine is lower than this line.
     var bqLevelMid = MarkdownBlockQuoteLevelFromString(midLine.text);
     var bqLevelPrv = MarkdownBlockQuoteLevelFromString(prevLine.text);
-    if (bqLevelMid > bqLevelPrv) {
+    if (bqLevelMid != bqLevelPrv) {
         return midLine;
     }
     
@@ -376,8 +380,8 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
     // back out into a shallower level.  Therefore, the end is only when the nextLine level is greater than this line level.
     var bqLevelMid = MarkdownBlockQuoteLevelFromString(midLine.text);
     var bqLevelNxt = MarkdownBlockQuoteLevelFromString(nextLine.text);
-    if (bqLevelNxt == 0 || (bqLevelMid > 0 && bqLevelNxt > bqLevelMid)) {
-        return midLine;
+    if (bqLevelMid > 0 && (bqLevelNxt == 0 || bqLevelNxt > bqLevelMid)) {
+            return midLine;
     }
 
     return GetEndLine(editor, editor.document.lineAt(midLine.lineNumber + 1), maxLineNum);

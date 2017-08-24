@@ -16,7 +16,8 @@
                 "${workspaceRoot}/out/src/*.js.map"
             ],
             "preLaunchTask": "npm"
-        },
+        }
+        ,
         {
             "name": "Launch Tests",
             "type": "extensionHost",

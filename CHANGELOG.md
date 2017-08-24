@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.1.0
+1.2.0
 -----
 - When a line ends with a word that begins with a left square bracket 
   ReflowMarkdown will assume it is the beginning of a hyperlink and ignore the 

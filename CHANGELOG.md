@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.3.0
+-----
+ - Support added for hyperlink text within square brackts to not be broken 
+   when it occurs at the end of a line. This improves readability of the plain 
+   text document because it makes long and unfriendly hyperlinks stay at the 
+   end of lines instead of in the middle where the reader has to skip around them.
+
 1.2.0
 -----
 - When a line ends with a word that begins with a left square bracket 

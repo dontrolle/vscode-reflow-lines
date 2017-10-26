@@ -3,7 +3,8 @@ mdtest.md
  
 This is a markdown file for testing the ReflowMarkdown extension and this first paragraph starts on line 4 and ends on line 7. Line 4 should be a
 paragraph start line, line 7 should be a paragraph end line, and lines 5 and 6
-should be neither because it is in the middle.
+should be neither because 
+they are is in the middle.
 
 BlockQuotes
 -----------
@@ -30,14 +31,23 @@ on the first line, rather than starting right under the number.
 10. This is yet antother item.
 11. TODO: Make the numbers auto-renumber
 
-
+Hyperlinks (where the text does not have white space in it)
+-----------------------------------------------------------
 This is for testing a line that has a long inline link at the end such as [link](http://www.somelonglink.com/a/b/c/1/2/3). 
 In this case we do not want the long link to be at the start of a new line. 
 Instead, we would rather just have the link extend beyond the max length 
 setting. This is an exception because it improves readability. 
 
-TODO:
------
+Hyperlinks (where the text has white space in it)
+-------------------------------------------------
 Here is a similar paragraph to the one above but the link text has contains [A space](http://www.somelonglink.com/a/b/c/1/2/3). 
-The line break will be between the 'A' and the 'space' and this is not wanted.
-This is something that will be fixed in a later release.
+Again in this case we do not want the long link to be at the start of a new 
+line. Because there is whitespace within the square brackets we have to first 
+replace that whitespace with a character that is not likely to occur (for now 
+we are using the \x08 (backspace) character). After the reflow, we restore the 
+spaces. 
+
+Hyperlinks (multiple)
+-------------------------------------------------
+Here is a similar paragraph to the one above but there are [multiple hyperlinks in it](http://www.somelonglink.com/a/b/c/1/2/3). 
+The first line should not be wrapped but this one should because the link starts [after the max length](http://www.somelonglink.com/a/b/c/1/2/3). 

@@ -56,13 +56,15 @@ suite("mytests", () => {
 
   myExtension.GoToLine(4, false);
   let sei = myExtension.GetStartEndInfo(vscode.window.activeTextEditor);
-  
-   test("#mytest", () =>{
-       assert.equal(sei.lineStart, 4-1);
-       assert.equal(sei.lineEnd, 7-1);       
-   })
 
- 
+  test("#mytest", () =>{
+       assert.equal(sei.lineStart, 4-1);
+       assert.equal(sei.lineEnd, 7-1);    
+       myExtension.reflow();
+        // needs work
+        //   sei = myExtension.GetStartEndInfo(vscode.window.activeTextEditor);
+        //   let x = 0;
+    });
 
 
 });

@@ -6,126 +6,95 @@ import * as vscode from "vscode";
     * insert linebreaks as-you-type
 */
 
-export function activate(context: vscode.ExtensionContext) {
+export function reflow() {
 
-    let disposable = vscode.commands.registerCommand("extension.reflowMarkdown", () => {
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        return; // No open text editor
+    }
 
-        let editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return; // No open text editor
-        }
+    let wsConfig = vscode.workspace.getConfiguration("reflowMarkdown");
 
-// GoToLine(-1, true);
-// if (1 === 1) { return ;}
+    let wrapAt = GetPreferredLineLength(wsConfig);
 
+    const selection = editor.selection;
+    const position = editor.selection.active;
+    let sei = GetStartEndInfo(editor);
 
-        let wsConfig = vscode.workspace.getConfiguration("reflowMarkdown");
+    let maxLineNo = editor.document.lineCount;
+    let len = editor.document.lineAt(sei.lineEnd).text.length;
+    let range = new vscode.Range(sei.lineStart, 0, sei.lineEnd, len);
+    let text = editor.document.getText(range);
 
-        let wrapAt = GetPreferredLineLength(wsConfig);
+    // if we are in a blockQuote (or nested blockQuote), then remove the line-feeds and greater-than signs
+    // a the beginning of each line and replace them with spaces.  we will restore them afterwards...
+    if (sei.indents.blockQuoteLevel > 0) {
+        text = text.replace(/(^|\n)\s*(>\s*)+/g, " ");
+    }
 
-        const selection = editor.selection;
-        const position = editor.selection.active;
-
-        //let paragraphStartLineNo = position.line;
-        //let currLine = editor.document.lineAt(paragraphStartLineNo);
-        //let prevLine = editor.document.lineAt(paragraphStartLineNo - 1);
-
-        let sei = GetStartEndInfo(editor);
-
-        // while (!IsParagraphStart(editor, paragraphStartLineNo)) {
-        //     paragraphStartLineNo -= 1;
-        //     //currLine = editor.document.lineAt(paragraphStartLineNo);
-        //     //prevLine = editor.document.lineAt(paragraphStartLineNo - 1);            
-        // }
-        // // paragraphStartLineNo now points to the first line of the paragraph or the first line in the document
-
-        let maxLineNo = editor.document.lineCount;
-
-        // let paragraphEndLineNo = position.line;
-        // while (!IsParagraphEnd(editor, paragraphEndLineNo)) {
-        //     paragraphEndLineNo += 1;
-        // }
-        // paragraphEndLineNo now points to the last line or the last line of the paragraph
-
-        //let indentLength = sei.indent;
-        // if (PreserveIndent(wsConfig)) {
-        //     // work to preserve indents - if all lines are at same indent, preserve that indent
-        //     let indentLengths: number[] = [];
-        //     //for (let i = paragraphStartLineNo; i <= paragraphEndLineNo; i++) {
-        //     for (let i = sei.lineStart; i <= sei.lineEnd; i++) {
-        //         let line = editor.document.lineAt(i);
-        //         indentLengths.push(line.firstNonWhitespaceCharacterIndex);
-        //     }
-
-        //     // TODO - allow some fuzz in detecting the indent that the user is aiming for; if a single line
-        //     //         is off, e.g.; in that case, we want to set the indent based on the other lines.
-        //     indentLength = indentLengths[0];
-        //     if (!indentLengths.every(i => indentLength === i)) {
-        //         indentLength = 0;
-        //     }
-        // }
-
-        //let len = editor.document.lineAt(paragraphEndLineNo).text.length;
-        let len = editor.document.lineAt(sei.lineEnd).text.length;
-        //let range = new vscode.Range(paragraphStartLineNo, 0, paragraphEndLineNo, len);
-        let range = new vscode.Range(sei.lineStart, 0, sei.lineEnd, len);
-        let text = editor.document.getText(range);
-
-        if (sei.indents.blockQuoteLevel > 0) {
-            text = text.replace(/(^|\n)\s*(>\s*)+/g, " ");
-        }
-
-
-        let words = text.split(/\s/);
-
-        let newLines: string[] = [];
-        let curLine = sei.indents.firstLine;
-        let curMaxLineLength = wrapAt;
-
-        words.forEach(word => {
-            if (word !== "") {
-
-                // if the current line length is already longer than the max length, push it to the new lines array
-                // OR if our word does NOT start with a left square bracket (i.e. is not a .md hyperlink) AND
-                // if adding it and a space would make the line longer than the max length, also push it to the new lines array
-                if (curLine.length >= curMaxLineLength || (word[0] != "[" && curLine.length + 1 + word.length >= curMaxLineLength)) {
-                    newLines.push(curLine);
-                    curLine = sei.indents.otherLines;
-                }
-
-                // if (curLine.length > indentLength)
-                //     curLine = curLine.concat(" ");
-
-                curLine = curLine.concat(word).concat(" ");
-            }
-        });
-
-
-        // if we are in a markdown file, and the original text ended with 2 spaces, restore it
-        if (editor.document.fileName.endsWith(".md") && text.endsWith("  ")) {
-            curLine += "  ";
-        }  
-
-
-        // the final line will be in curLine
-        if (curLine.length > 0) {
-            newLines.push(curLine);
-        }
-
-        // newParagraph is constructed with \n for line-endings; 
-        // textEditorEdit.replace will insert the correct environment-specific line-endings 
-        let newParagraph = newLines.join("\n");
-
-        let applied = editor.edit(
-            function (textEditorEdit) {
-                textEditorEdit.replace(range, newParagraph);
-            }
-        );
-
-        // reset selection (TODO may be contraintuitive... maybe rather reset to single position, always?)
-        editor.selection = selection;
+    // replace spaces within link text (in square brackets) with another charcter that is highly unlikely to be present
+    // the \x08 (backspace) character is a good candidate...
+    text = text.replace(/\[.*?\s.*?]/g, (substr, ...args) => {
+        return substr.replace(/\s/g, "\x08"); // x08 is hex ascii code for the 'backspace' character
     });
 
+    let words = text.split(/\s/);
+
+    let newLines: string[] = [];
+    let curLine = sei.indents.firstLine;
+    let curMaxLineLength = wrapAt;
+
+    words.forEach(word => {
+        if (word !== "") {
+
+            // if the current line length is already longer than the max length, push it to the new lines array
+            // OR if our word does NOT start with a left square bracket (i.e. is not a .md hyperlink) AND
+            // if adding it and a space would make the line longer than the max length, also push it to the new lines array
+            if (curLine.length >= curMaxLineLength || (word[0] != "[" && curLine.length + 1 + word.length >= curMaxLineLength)) {
+                newLines.push(curLine);
+                curLine = sei.indents.otherLines;
+            }
+
+            // if (curLine.length > indentLength)
+            //     curLine = curLine.concat(" ");
+
+            curLine = curLine.concat(word).concat(" ");
+        }
+    });
+
+
+    // if we are in a markdown file, and the original text ended with 2 spaces, restore it
+    if (editor.document.fileName.endsWith(".md") && text.endsWith("  ")) {
+        curLine += "  ";
+    }  
+
+
+    // the final line will be in curLine
+    if (curLine.length > 0) {
+        newLines.push(curLine);
+    }
+
+    // newParagraph is constructed with \n for line-endings; 
+    // textEditorEdit.replace will insert the correct environment-specific line-endings 
+    let newParagraph = newLines.join("\n");
+
+    // replace \x08 (backspace) characters within link text (in square brackets) with spaces
+    newParagraph = newParagraph.replace(/\[.*?\x08.*?]/g, (substr, ...args) => {
+        return substr.replace(/\x08/g, " "); // x08 is hex ascii code for the 'backspace' character
+    });
+
+    let applied = editor.edit(
+        function (textEditorEdit) {
+            textEditorEdit.replace(range, newParagraph);
+        }
+    );
+
+    // reset selection (TODO may be contraintuitive... maybe rather reset to single position, always?)
+    editor.selection = selection;
+}
+
+export function activate(context: vscode.ExtensionContext) {
+    let disposable = vscode.commands.registerCommand("extension.reflowMarkdown", reflow);
     context.subscriptions.push(disposable);
 }
 

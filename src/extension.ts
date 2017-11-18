@@ -8,7 +8,7 @@ import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
 
-    let disposable = vscode.commands.registerCommand("extension.reflowParagraph", () => {
+    let disposable = vscode.commands.registerCommand("extension.reflowParagraph", async () => {
 
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -87,14 +87,14 @@ export function activate(context: vscode.ExtensionContext) {
         // textEditorEdit.replace will insert the correct environment-specific line-endings 
         let newParagraph = newLines.join("\n");
 
-        let applied = editor.edit(
+        let applied = await editor.edit(
             function (textEditorEdit) {
                 textEditorEdit.replace(range, newParagraph);
             }
         );
 
-        // reset selection (TODO may be contraintuitive... maybe rather reset to single position, always?)
-        editor.selection = selection;
+        const lastReplacedLine = editor.document.lineAt(range.start.line + newLines.length - 1);
+        editor.selection = new vscode.Selection(lastReplacedLine.range.end, lastReplacedLine.range.end);
     });
 
     context.subscriptions.push(disposable);

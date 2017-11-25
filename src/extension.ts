@@ -1,11 +1,6 @@
 "use strict";
 import * as vscode from "vscode";
 
-/* TODOS
-* configurable:
-    * insert linebreaks as-you-type
-*/
-
 export function activate(context: vscode.ExtensionContext) {
 
     let disposable = vscode.commands.registerCommand("extension.reflowParagraph", async () => {
@@ -14,6 +9,8 @@ export function activate(context: vscode.ExtensionContext) {
         if (!editor) {
             return; // No open text editor
         }
+
+        context.globalState
 
         let wsConfig = vscode.workspace.getConfiguration("reflow");
 
@@ -37,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
         // paragraphEndLineNo now points to the last line or the last line of the paragraph
 
         let indentLength = 0;
-        if (PreserveIndent(wsConfig)) {
+        if (GetPreserveIndent(wsConfig)) {
             // work to preserve indents - if all lines are at same indent, preserve that indent
             let indentLengths: number[] = [];
             for (let i = paragraphStartLineNo; i <= paragraphEndLineNo; i++) {
@@ -93,8 +90,14 @@ export function activate(context: vscode.ExtensionContext) {
             }
         );
 
-        const lastReplacedLine = editor.document.lineAt(range.start.line + newLines.length - 1);
-        editor.selection = new vscode.Selection(lastReplacedLine.range.end, lastReplacedLine.range.end);
+        let setSelectionToEndOfRewrapped = GetSetSelectionToEndOfRewrappedConfig(wsConfig);
+        if (setSelectionToEndOfRewrapped) {
+            const lastReplacedLine = editor.document.lineAt(range.start.line + newLines.length - 1);
+            editor.selection = new vscode.Selection(lastReplacedLine.range.end, lastReplacedLine.range.end);
+        }
+        else {
+            editor.selection = selection;
+        }
     });
 
     context.subscriptions.push(disposable);
@@ -107,6 +110,10 @@ function GetPreferredLineLength(wsConfig: vscode.WorkspaceConfiguration): number
     return wsConfig.get("preferredLineLength", 80);
 }
 
-function PreserveIndent(wsConfig: vscode.WorkspaceConfiguration): boolean {
+function GetPreserveIndent(wsConfig: vscode.WorkspaceConfiguration): boolean {
     return wsConfig.get("preserveIndent", true);
+}
+
+function GetSetSelectionToEndOfRewrappedConfig(wsConfig: vscode.WorkspaceConfiguration): boolean {
+    return wsConfig.get("setSelectionToEndOfRewrapped", true);
 }

@@ -2,7 +2,7 @@
     "name": "reflow-paragraph",
     "displayName": "Reflow paragraph",
     "description": "Format lines in paragraph to a preferred line-length.",
-    "version": "1.1.0",
+    "version": "1.3.0",
     "publisher": "TroelsDamgaard",
     "engines": {
         "vscode": "^1.5.0"
@@ -10,17 +10,17 @@
     "categories": [
         "Other"
     ],
-	"keywords": [
-		"markdown",
+    "keywords": [
+        "markdown",
         "text",
-		"format",
+        "format",
         "reflow",
         "wrap"
-	],    
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/dontrolle/vscode-reflow-lines"
-	},
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dontrolle/vscode-reflow-lines"
+    },
     "activationEvents": [
         "onCommand:extension.reflowParagraph"
     ],
@@ -30,28 +30,37 @@
             "type": "object",
             "title": "Reflow paragraph configuration",
             "properties": {
-                "reflow.preferredLineLength" :{
+                "reflow.preferredLineLength": {
                     "type": "number",
                     "default": 80,
                     "description": "Preferred line length for reflowing paragraph.",
                     "minimum": 0
                 },
-                "reflow.preserveIndent" : {
-                    "type" : "boolean",
+                "reflow.preserveIndent": {
+                    "type": "boolean",
                     "default": true,
-                    "description" : "Preserve paragraph indent when reflowing paragraph."
+                    "description": "Preserve paragraph indent when reflowing paragraph."
+                },
+                "reflow.setSelectionToEndOfRewrapped": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Reset cursor-position to the end of the reflowed paragraph."
                 }
             }
         },
-        "commands": [{
-            "command": "extension.reflowParagraph",
-            "title": "Reflow paragraph"
-        }],
-        "keybindings": [{
-            "command": "extension.reflowParagraph",
-            "key": "alt+q",
-            "when": "editorTextFocus"
-        }]
+        "commands": [
+            {
+                "command": "extension.reflowParagraph",
+                "title": "Reflow paragraph"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.reflowParagraph",
+                "key": "alt+q",
+                "when": "editorTextFocus"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",

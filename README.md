@@ -12,6 +12,7 @@ This extension contributes the following settings:
 
 * `reflow.preferredLineLength`: Set the preferred line length for reflowing paragraph (default: `80`).
 * `reflow.preserveIndent`: Preserve paragraph indent when reflowing paragraph (default `true`).
+* `reflow.setSelectionToEndOfRewrapped`: Reset cursor-position to the end of reflowed paragraph (default `true`).
 
 ## keyboard shortcuts
 
@@ -22,6 +23,10 @@ Invoke reflow paragraph using `alt+q` (default).
 None.
 
 ## Release Notes
+
+### 1.2.0
+
+Reset cursor-position to end of reflowed paragraph, by default - mimicking behavior from emacs and vim (thanks @hstuart). If you prefer the old behavior set the user setting `reflow.setSelectionToEndOfRewrapped` to `false`.
 
 ### 1.1.0
 

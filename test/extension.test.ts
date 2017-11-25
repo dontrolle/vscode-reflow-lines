@@ -14,12 +14,6 @@ import * as myExtension from '../src/extension';
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Extension Tests", () => {
 
-    // Defines a Mocha unit test
-    test("Something 1", () => {
-        assert.equal(-1, [1, 2, 3].indexOf(5));
-        assert.equal(-1, [1, 2, 3].indexOf(0));
-    });
-
     test("Set cursor to end of selection", async () => {
         const document = vscode.Uri.parse('untitled:summary.txt');
         const doc = await vscode.workspace.openTextDocument(document);
@@ -30,9 +24,17 @@ suite("Extension Tests", () => {
         await editor.edit(e => e.replace(textRange, "This is a very long line of text that needs to be reflowed into multiple lines at interesting points"));
         const cursorPosition = new vscode.Position(0, 98);
         editor.selection.with(cursorPosition, cursorPosition);
-        const context : any = { "subscriptions": [] };
+        const context: any = { "subscriptions": [] };
         const v = await vscode.commands.executeCommand("extension.reflowParagraph");
-        assert.equal(editor.selection.active.line, 1);
-        assert.equal(editor.selection.active.character, 21);
-    })
+
+        // we'll be lazy and depend on config in this little test (don't do this in code, you expect to be paid for...)
+        let wsConfig = vscode.workspace.getConfiguration("reflow");
+        let expectedCursorPosition = new vscode.Position(0, 78);
+        if (wsConfig.get("setSelectionToEndOfRewrapped")) {
+            expectedCursorPosition = new vscode.Position(1, 21);
+        }
+
+        assert.equal(editor.selection.active.line, expectedCursorPosition.line);
+        assert.equal(editor.selection.active.character, expectedCursorPosition.character);
+    });
 });

@@ -52,19 +52,35 @@ import * as myExtension from '../src/extension';
 
 // });
 
+let setDocText = (txt: string) => {
+    return vscode.window.activeTextEditor.edit((tee: vscode.TextEditorEdit) => {
+        let s = new vscode.Position(0, 0);
+        let e = vscode.window.activeTextEditor.document.lineAt(vscode.window.activeTextEditor.document.lineCount - 1).range.end;
+        let r = new vscode.Range(s, e);
+        tee.replace(r, txt);
+    }).then(success => {
+          if (!success) { assert.fail('', '', 'edit failed', ''); }
+    })
+}
+
 suite("mytests", () => {
+ 
+  test("#mytest", () => {
+    setDocText(`This is a single line of markdown text which is longer than the default preferredLineLength of 80 characters.`)
+    .then(success => {
+        myExtension.reflow()
+        .then(success => {
+            assert.equal(vscode.window.activeTextEditor.document.lineAt(0).text, 
+            `This is a single line of markdown text which is longer than the default`,
+            'Unexpected Result!');
+            // assert.equal(vscode.window.activeTextEditor.document.lineAt(1).text, 
+            // `preferredLineLength of 80 characters. `,
+            // 'Unexpected Result!');
+        })
+    })
 
-  myExtension.GoToLine(4, false);
-  let sei = myExtension.GetStartEndInfo(vscode.window.activeTextEditor);
 
-  test("#mytest", () =>{
-       assert.equal(sei.lineStart, 4-1);
-       assert.equal(sei.lineEnd, 7-1);    
-       myExtension.reflow();
-        // needs work
-        //   sei = myExtension.GetStartEndInfo(vscode.window.activeTextEditor);
-        //   let x = 0;
-    });
+  });
 
 
 });

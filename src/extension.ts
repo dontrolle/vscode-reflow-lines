@@ -44,27 +44,27 @@ export function reflow() {
     let curLine = sei.indents.firstLine;
     let curMaxLineLength = wrapAt;
 
-    words.forEach(word => {
+ 
+    
+    words.forEach((word, i) => {
         if (word !== "") {
 
             // if the current line length is already longer than the max length, push it to the new lines array
             // OR if our word does NOT start with a left square bracket (i.e. is not a .md hyperlink) AND
             // if adding it and a space would make the line longer than the max length, also push it to the new lines array
             if (curLine.length >= curMaxLineLength || (word[0] != "[" && curLine.length + 1 + word.length >= curMaxLineLength)) {
-                newLines.push(curLine);
+                newLines.push(curLine.replace(/\s*$/, ''));  //remove trailing whitespace
                 curLine = sei.indents.otherLines;
-            }
-
-            // if (curLine.length > indentLength)
-            //     curLine = curLine.concat(" ");
-
-            curLine = curLine.concat(word).concat(" ");
+            } 
+            
+            curLine = curLine.concat(word).concat(" ");            
         }
     });
 
+    curLine = curLine.replace(/\s*$/, '');  //remove trailing whitespace
 
-    // if we are in a markdown file, and the original text ended with 2 spaces, restore it
-    if (editor.document.fileName.endsWith(".md") && text.endsWith("  ")) {
+    // if the original text ended with 2 spaces, restore it
+    if (text.endsWith("  ")) {
         curLine += "  ";
     }  
 
@@ -91,6 +91,8 @@ export function reflow() {
 
     // reset selection (TODO may be contraintuitive... maybe rather reset to single position, always?)
     editor.selection = selection;
+
+    return applied;
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -108,76 +110,6 @@ function GetPreferredLineLength(wsConfig: vscode.WorkspaceConfiguration): number
 function PreserveIndent(wsConfig: vscode.WorkspaceConfiguration): boolean {
     return wsConfig.get("preserveIndent", true);
 }
-
-// export function IsParagraphStart(editor: vscode.TextEditor, lineNo: number): boolean {
-  
-//     if (lineNo - 1 <= 0) {
-//         return true;
-//     }
-
-//     let currLine = editor.document.lineAt(lineNo);
-
-//     // If the current line is empty, it is a start point
-//     if (currLine.isEmptyOrWhitespace) {
-//         return true;
-//     }
-
-//     // If the current line is a hash heading, the current line is a start point
-//     if (IsMarkdownHeadingHash(currLine.text)) {
-//         return true;
-//     }
-
-//     // LOOK AT THE PREVIOUS LINE, IF IT IS AND END, THEN THIS IS A START
-
-//     return IsParagraphEnd(editor, lineNo - 1);
-// }
-
-// export function IsParagraphEnd(editor: vscode.TextEditor, lineNo: number): boolean {
-    
-//     let maxLineNo = editor.document.lineCount;
-    
-//     if (lineNo + 1 >= maxLineNo) {
-//         return true;
-//     }
-    
-//     let currLine = editor.document.lineAt(lineNo);
-
-//     // if we are not in a markdown file, bail out
-//     if (!editor.document.fileName.endsWith(".md")) {
-//         return false;
-//     }    
-
-//     // If the current line is empty, it is an end point
-//     if (currLine.isEmptyOrWhitespace) {
-//         return true;
-//     }
-
-//     // If the current line is a hash or dash heading, it is a end point
-//     if (IsMarkdownHeadingHash(currLine.text) || IsMarkdownHeadingDash(currLine.text)) {
-//         return true;
-//     }
-
-//     // If the current line ends with two, spaces, it is an end point    
-//     if (currLine.text.endsWith("  ")) {
-//         return true;
-//     }
-
-//     // LOOK AT THE NEXT LINE
-
-//     let nextLine = editor.document.lineAt(lineNo + 1);
-
-//     if (nextLine.isEmptyOrWhitespace) {
-//         return true;
-//     }
-
-//     // If the next line is a hash heading, the current line is an endpoint
-//     if (IsMarkdownHeadingDash(nextLine.text)) {
-//         return true;
-//     }
-
-
-//     return false;
-// }
 
 function IsMarkdownHeadingHash(text: string): boolean {
     return text.startsWith("#");

@@ -5,7 +5,6 @@ This is a markdown file for testing the ReflowMarkdown extension and this first 
 paragraph start line, line 7 should be a paragraph end line, and lines 5 and 6
 should be neither because 
 they are is in the middle.
-
 BlockQuotes
 -----------
   > This is a markdown blockquote that begins on line 11 and ends on line 13. When reflow is applied to
@@ -16,20 +15,33 @@ BlockQuotes
   
 Number Lists
 ------------
-01. This is the first list item.
-02. This is the second list item and it is very long.  When reflow is applied, the lines that follow
-the first line will all be indented such that they start at the same place that the text starts fort
-on the first line, rather than starting right under the number.
-02. This is the third list item.
-03. This is the fourth list item.
-04. This is yet antother item.
-05. This is yet antother item.
-06. This is yet antother item.
-07. This is yet antother item.
-08. This is yet antother item.
-09. This is yet antother item. 
-10. This is yet antother item.
-11. TODO: Make the numbers auto-renumber
+
+1. This is the first list item.
+
+2. This is the second list item and it is very long. When reflow is applied, 
+   the lines that follow the first line will all be indented such that they 
+   start at the same place that the text starts fort on the first line, rather 
+   than starting right under the number. 
+
+3. This is the third list item.
+
+4. This is the fourth list item.
+
+5. This is yet antother item.
+
+6. This is yet antother item.
+
+7. This is yet antother item.
+
+8. This is yet antother item.
+
+9. This is yet antother item.
+
+10. This is yet antother item. 
+
+11. This is yet antother item.
+
+12. TODO: Make the numbers auto-renumber
 
 Hyperlinks (where the text does not have white space in it)
 -----------------------------------------------------------

@@ -2,9 +2,9 @@
 {
     "version": "0.1.0",
     "configurations": [
-        
+
         {
-            "name": "Launch Extension",
+            "name": "Launch/Debug Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -16,11 +16,10 @@
                 "${workspaceRoot}/out/src/*.js",
                 "${workspaceRoot}/out/src/*.js.map"
             ],
-            "preLaunchTask": "npm"
-        }
-        ,
+            "preLaunchTask": "npm: compile"
+        },
         {
-            "name": "Launch Tests",
+            "name": "Launch/Debug Integration Tests",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -33,7 +32,27 @@
                 "${workspaceRoot}/out/src/*.js",
                 "${workspaceRoot}/out/src/*.js.map"
             ],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "npm: compile"
+        },
+        {
+            "name": "Launch/Debug Unit Tests",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",  // mind the underscore...not sure why
+            "args": ["--ui", "bdd",
+                     "--timeout","999999",
+                     "--colors", 
+                     "./out/testUnit/"],  // doesn't work if you use "${workspaceFolder}/out/testUnit/"!
+            "stopOnEntry": false,
+            "sourceMaps": true,
+            "outFiles":[
+                "${workspaceRoot}/out/testUnit/*.js",
+                "${workspaceRoot}/out/testUnit/*.js.map",
+                "${workspaceRoot}/out/src/*.js",
+                "${workspaceRoot}/out/src/*.js.map"
+            ],
+            "internalConsoleOptions":"openOnSessionStart",
+            "preLaunchTask": "npm: compile"
         }
     ]
 }

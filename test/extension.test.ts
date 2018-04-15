@@ -1,15 +1,20 @@
-//
+// <reference path="./mocha.d.ts" />
+// <reference path="../node_modules/@types/jasmine/index.d.ts" />
+
 // Note: This example test is leveraging the Mocha test framework.
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
 
-// The module 'assert' provides assertion methods from node
-import * as assert from 'assert-plus';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import * as myExtension from '../src/extension';
+import * as testable from '../src/testable';
+import * as chai from 'chai';
+
+let assert = chai.assert;
+
 
 // NOTE: Lines are 0 based from the editors perspective, so we minus 1 so our
 //       test output makes sense when we look at mdtest.md.
@@ -63,6 +68,8 @@ let setDocText = (txt: string) => {
     })
 }
 
+
+
 suite("mytests", () => {
  
   test("#mytest", () => {
@@ -78,9 +85,21 @@ suite("mytests", () => {
             // 'Unexpected Result!');
         })
     })
-
-
   });
+
+// needs work
+//   test("gotoLine", () => {
+//      setDocText(`This is not one,
+//not two,
+//not three,
+//but four lines of text.`).then(success => {
+//         testable.goToLine(vscode.window.activeTextEditor, vscode.Selection, vscode.Selection, 4, true);
+//         assert.equal(vscode.window.activeTextEditor.selection.anchor.line, 4);
+//      });
+//   });
 
 
 });
+
+
+

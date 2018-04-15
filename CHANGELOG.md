@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+(*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned) for releases but not guaranteed...)*
+
+1.4.2
+-----
+
+- Fix incorrect regex that looked for spaces embedded within square brackets
+  (link text). The search was greedy and therefore was not working when two
+  links were on the same line.
+- Refactored functions to a separate, unit-testable module.
+- Several other changes relating to the package and vscode configuration.
+
 1.4.1
 -----
 

@@ -7,17 +7,19 @@ by [Troels Damgaard](https://github.com/dontrolle/vscode-reflow-lines).  Instead
 
 Format the current heading, paragraph, list, or blockquote to have lines no longer than your preferred line length, using the `alt+q` shortcut or your own user-specific keyboard-binding.
 
-This extension defaults to reflowing lines to be no more than 80 characters long. The preferred line length may be overriden using the config value of `reflowMarkdown.preferredLineLength`. 
+This extension defaults to reflowing lines to be no more than 80 characters long. The preferred line length may be overriden using the config value of `reflowMarkdown.preferredLineLength`.
 
-By default, it preserves indent for paragraph, when reflowing. This behavior may be switched off, by setting the configuration option `reflowMarkdown.preserveIndent` to `false`.  
+By default, it preserves indent for paragraph, when reflowing. This behavior may be switched off, by setting the configuration option `reflowMarkdown.preserveIndent` to `false`.
 
-## Extension Settings
+Extension Settings
+------------------
 
 This extension contributes the following settings:
 
 * `reflow.preferredLineLength`: Set the preferred line length for reflowing paragraph (default: `80`).
 * `reflow.preserveIndent`: Preserve paragraph indent when reflowing paragraph (default `true`).
 
-## keyboard shortcuts
+Keyboard Shortcuts
+------------------
 
 Invoke a reflow using `alt+q` (default).

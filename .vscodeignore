@@ -1,9 +1,12 @@
-.vscode/**
-.vscode-test/**
-out/test/**
-test/**
-src/**
-**/*.map
-.gitignore
-tsconfig.json
-vsc-extension-quickstart.md
+# Ignore everything
+*
+*/**
+
+# Whitelist what you need
+!img/logo.png
+!out/src.*
+!CHANGELOG.md
+!LICENSE
+!package.json
+!README.md
+

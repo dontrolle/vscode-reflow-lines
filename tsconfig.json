@@ -7,10 +7,21 @@
             "es6"
         ],
         "sourceMap": true,
-        "rootDir": "."
+        "rootDir": ".",
+        //"typeRoots" : ["./node_modules/@types"],
+        //"types" : [],
+        "types": ["node"],
+        //"types": ["node","assert-plus","jasmine"],
+        "removeComments": true
     },
-    "exclude": [
-        "node_modules",
-        ".vscode-test"
-    ]
+    "files": [
+        "src/extension.ts",
+        "src/testable.ts",
+        "test/extension.test.ts",
+        "test/index.ts",
+        "testUnit/testable.test.ts",
+    ],
+    // "exclude": [
+    //     "node_modules/@types/jasmine/index.d.ts",
+    //     "node_modules/@types/mocha/index.d.ts"
 }

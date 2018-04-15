@@ -2,9 +2,10 @@
   "name": "reflow-markdown",
   "displayName": "Reflow Markdown",
   "description": "Format lines in markdown headers, paragraphs, blockquotes, lists, etc. to a preferred line-length.",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "publisher": "marvhen",
   "icon": "img/logo.png",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.5.0"
   },
@@ -25,7 +26,7 @@
   "galleryBanner": {
     "color": "#000000",
     "theme": "dark"
-    },
+  },
   "activationEvents": [
     "onCommand:extension.reflowMarkdown"
   ],
@@ -63,16 +64,20 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "mocha ./out/testUnit/",
+    "testAndWatch": "mocha --watch --watch-extensions js ./out/testUnit/",
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
-    "typescript": "^2.0.3",
-    "vscode": "^1.0.0",
-    "mocha": "^2.3.3",
-    "@types/node": "^6.0.40",
-    "@types/mocha": "^2.2.32",
-    "@types/assert-plus": "^1.0.3"
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "5.0.0",
+    "@types/node": "^7.0.43",
+    "chai": "4.1.2",
+    "mocha": "5.1.0",
+    "typescript": "2.8.1",
+    "vscode": "^1.0.0"
   }
 }

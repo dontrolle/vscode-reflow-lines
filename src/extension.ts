@@ -1,5 +1,15 @@
-"use strict";
 import * as vscode from "vscode";
+import { replaceSpacesInLinkTextWithBs,
+         Indents,
+         StartEndInfo,
+         getLineIndent,
+         isListStart,
+         isBlockQuote,
+         markdownBlockQuoteLevelFromRegExMatch,
+         isMarkdownHeadingHash,
+         isMarkdownHeadingDash,
+         markdownBlockQuoteLevelFromString,
+        } from "./testable";
 
 /* TODOS
 * configurable:     
@@ -32,11 +42,8 @@ export function reflow() {
         text = text.replace(/(^|\n)\s*(>\s*)+/g, " ");
     }
 
-    // replace spaces within link text (in square brackets) with another charcter that is highly unlikely to be present
-    // the \x08 (backspace) character is a good candidate...
-    text = text.replace(/\[.*?\s.*?]/g, (substr, ...args) => {
-        return substr.replace(/\s/g, "\x08"); // x08 is hex ascii code for the 'backspace' character
-    });
+
+    text = replaceSpacesInLinkTextWithBs(text);
 
     let words = text.split(/\s/);
 
@@ -111,66 +118,6 @@ function PreserveIndent(wsConfig: vscode.WorkspaceConfiguration): boolean {
     return wsConfig.get("preserveIndent", true);
 }
 
-function IsMarkdownHeadingHash(text: string): boolean {
-    return text.startsWith("#");
-}
-
-function IsMarkdownHeadingDash(text: string): boolean {
-    return text.startsWith("==") || text.startsWith("--");
-}
-
-function IsMarkdownListStart(text: string): RegExpMatchArray {
-
-    // this will match on...
-    // zero or more spaces + [ (1 or more digits + 1 decimal) OR (1 dash or asterick) ] + 1 or more spaces    
-    return text.match(/^\s*((\d+\.)|([-\*]))\s+/);        
-}
-
-function IsMarkdownBlockQuote(text: string): RegExpMatchArray {
-
-    // this will match on...
-    // line beginning + [zero or more spaces + 1 greater than sign](one-or-more) + 1 or more spaces        
-    return text.match(/^(\s*>)+\s*/);       
-}
-
-function MarkdownBlockQuoteLevelFromRegExMatch(matchArray: RegExpMatchArray): number {
-    if (matchArray && matchArray.length)
-        return matchArray[0].replace(/\s/g, "").length
-    else
-        return 0;
-}
-
-function MarkdownBlockQuoteLevelFromString(text: string): number {
-    return MarkdownBlockQuoteLevelFromRegExMatch(IsMarkdownBlockQuote(text));    
-}
-
-
-//for testing
-export function GoToLine(oneBasedLine: number, selectWholeLine: boolean) {
-    let zeroBasedLine = oneBasedLine - 1
-    let editor = vscode.window.activeTextEditor;
-    let range = editor.document.lineAt(zeroBasedLine).range;
-    
-    editor.selection = selectWholeLine 
-                     ? new vscode.Selection(range.start, range.end) 
-                     : new vscode.Selection(zeroBasedLine, 0, zeroBasedLine, 0);
-
-    editor.revealRange(range);
-}
-
-
-interface Indents {
-    firstLine: string;
-    otherLines: string;
-    blockQuoteLevel: number;
-}
-
-interface StartEndInfo {
-    lineStart: number;
-    lineEnd: number;
-    indents: Indents;
-}
-
 export function GetStartEndInfo(editor: vscode.TextEditor): StartEndInfo {
 
     const midLineNum = editor.selection.active.line;
@@ -179,7 +126,7 @@ export function GetStartEndInfo(editor: vscode.TextEditor): StartEndInfo {
 
     let s = GetStartLine(editor, midLine);
     let e = GetEndLine(editor, midLine, maxLineNum);
-    let i = GetLineIndent(s);
+    let i = getLineIndent(s.firstNonWhitespaceCharacterIndex, s.text);
 
     return  {
         lineStart: s.lineNumber,
@@ -202,11 +149,11 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
     }
 
     // If the current line is a hash heading, the current line is a start point
-    if (IsMarkdownHeadingHash(midLine.text) || IsMarkdownHeadingDash(midLine.text)) {
+    if (isMarkdownHeadingHash(midLine.text) || isMarkdownHeadingDash(midLine.text)) {
         return midLine;
     }
 
-    if (IsMarkdownListStart(midLine.text)) {
+    if (isListStart(midLine.text)) {
         return midLine;
     }
 
@@ -218,7 +165,7 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
     }
 
     // If the prev line is a hash or dash heading, this line is the start
-    if (IsMarkdownHeadingHash(prevLine.text) || IsMarkdownHeadingDash(prevLine.text)) {
+    if (isMarkdownHeadingHash(prevLine.text) || isMarkdownHeadingDash(prevLine.text)) {
         return midLine;
     }
 
@@ -229,8 +176,8 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
 
     // in [gitlab flavored] markdown, once blockQuotes nesting begins into a deeper level, it doesn't 
     // back out into a shallower level.  Therefore, the start is only when the prevLine is lower than this line.
-    var bqLevelMid = MarkdownBlockQuoteLevelFromString(midLine.text);
-    var bqLevelPrv = MarkdownBlockQuoteLevelFromString(prevLine.text);
+    var bqLevelMid = markdownBlockQuoteLevelFromString(midLine.text);
+    var bqLevelPrv = markdownBlockQuoteLevelFromString(prevLine.text);
     if (bqLevelMid != bqLevelPrv) {
         return midLine;
     }
@@ -251,7 +198,7 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
     }
 
     // If the current line is a hash or dash heading, it is a end point
-    if (IsMarkdownHeadingHash(midLine.text) || IsMarkdownHeadingDash(midLine.text)) {
+    if (isMarkdownHeadingHash(midLine.text) || isMarkdownHeadingDash(midLine.text)) {
         return midLine;
     }
 
@@ -268,19 +215,19 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
     }
 
     // If the next line is a hash heading, this line is the end
-    if (IsMarkdownHeadingDash(nextLine.text)) {
+    if (isMarkdownHeadingDash(nextLine.text)) {
         return midLine;
     }
 
     // if the next line starts a list, this line is the end
-    if (IsMarkdownListStart(nextLine.text)) {
+    if (isListStart(nextLine.text)) {
         return midLine;
     }
 
     // in [gitlab flavored] markdown, once blockQuotes nesting begins into a deeper level, it doesn't 
     // back out into a shallower level.  Therefore, the end is only when the nextLine level is greater than this line level.
-    var bqLevelMid = MarkdownBlockQuoteLevelFromString(midLine.text);
-    var bqLevelNxt = MarkdownBlockQuoteLevelFromString(nextLine.text);
+    var bqLevelMid = markdownBlockQuoteLevelFromString(midLine.text);
+    var bqLevelNxt = markdownBlockQuoteLevelFromString(nextLine.text);
     if (bqLevelMid > 0 && (bqLevelNxt == 0 || bqLevelNxt > bqLevelMid)) {
             return midLine;
     }
@@ -288,33 +235,3 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
     return GetEndLine(editor, editor.document.lineAt(midLine.lineNumber + 1), maxLineNum);
 }
 
-function GetLineIndent(startLine: vscode.TextLine): Indents {
-    
-    let startLnSpaces = " ".repeat(startLine.firstNonWhitespaceCharacterIndex);
-
-    let regExMatches = IsMarkdownListStart(startLine.text);
-    if (regExMatches) {        
-        return {
-            firstLine: startLnSpaces,
-            otherLines: " ".repeat(regExMatches[0].length),
-            blockQuoteLevel: 0
-        }
-    }
-    
-    regExMatches = IsMarkdownBlockQuote(startLine.text)
-    if (regExMatches) {
-        var level =  MarkdownBlockQuoteLevelFromRegExMatch(regExMatches);
-        var indent = "  " + ">".repeat(level) + " ";
-        return {
-            firstLine: indent,
-            otherLines: indent,
-            blockQuoteLevel: level
-        }        
-    }
-    
-    return {
-        firstLine: startLnSpaces,
-        otherLines: startLnSpaces,
-        blockQuoteLevel: 0
-    }
-}

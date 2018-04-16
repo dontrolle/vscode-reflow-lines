@@ -3,11 +3,15 @@ Change Log
 
 (*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned) for releases but not guaranteed...)*
 
+1.4.4
+-----
+
+- Correction to .vscodeignore
+
 1.4.3
 -----
 
-- The extension as installed from Visual Studio Marketplace is not working for some reason.  This
-  version is simply publishing it with the updated version of vsce to see if that fixes it.
+- The extension as installed from Visual Studio Marketplace is not working for some reason.  This version is simply publishing it with the updated version of vsce to see if that fixes it.
 
 1.4.2
 -----

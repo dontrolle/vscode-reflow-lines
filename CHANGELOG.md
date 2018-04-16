@@ -1,7 +1,8 @@
 Change Log
 ==========
 
-(*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned) for releases but not guaranteed...)*
+(*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned)
+for releases but not guaranteed...)*
 
 1.4.4
 -----
@@ -11,12 +12,15 @@ Change Log
 1.4.3
 -----
 
-- The extension as installed from Visual Studio Marketplace is not working for some reason.  This version is simply publishing it with the updated version of vsce to see if that fixes it.
+- The extension as installed from Visual Studio Marketplace is not working for
+  some reason. This version is simply publishing it with the updated version
+  of vsce to see if that fixes it.
 
 1.4.2
 -----
 
-- Fix incorrect regex that looked for spaces embedded within square brackets  (link text). The search was greedy and therefore was not working when two
+- Fix incorrect regex that looked for spaces embedded within square brackets
+  (link text). The search was greedy and therefore was not working when two
   links were on the same line.
 - Refactored functions to a separate, unit-testable module.
 - Several other changes relating to the package and vscode configuration.
@@ -37,10 +41,10 @@ Change Log
 1.3.0
 -----
 
-- Support added for hyperlink text within square brackts to not be broken
-  when it occurs at the end of a line. This improves readability of the plain
-  text document because it makes long and unfriendly hyperlinks stay at the
-  end of lines instead of in the middle where the reader has to skip around them.
+- Support added for hyperlink text within square brackts to not be broken when
+  it occurs at the end of a line. This improves readability of the plain text
+  document because it makes long and unfriendly hyperlinks stay at the end of
+  lines instead of in the middle where the reader has to skip around them.
 
 1.2.0
 -----
@@ -51,9 +55,9 @@ Change Log
   line instead of beginning a new line. This exceptional case will improve
   overall readability because most URLs are very long and verbose and readers
   are mostly concerned with the link text and not the link url. Currently this
-  will only work however when the link text is a single word.   If the link text
-  has spaces in it, it will break at the space and this is something that will be
-  fixed in a later release.
+  will only work however when the link text is a single word. If the link text
+  has spaces in it, it will break at the space and this is something that will
+  be fixed in a later release.
 - Fix the reflow not working sometimes due to the blockquote logic.
 
 1.0.0

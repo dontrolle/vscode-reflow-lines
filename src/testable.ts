@@ -13,19 +13,27 @@ export interface StartEndInfo {
     indents: Indents;
 }
 
-// replaces spaces within link text (in square brackets) with another charcter
+// replaces spaces within link text (in square brackets) with another character
 // that is highly unlikely to be present.  The \x08 (backspace) character is a
 // good candidate...
 export function replaceSpacesInLinkTextWithBs(txt: string): string {
     return txt.replace(/\[.*?\]/g, (substr, ...args) => {
         return substr.replace(/\s/g, "\x08"); // x08 is hex ascii code for the 'backspace' character
     });
-    
+   
 }
 
-// true if text is zero or more spaces + [ (1 or more digits + 1 decimal) OR (1 dash or asterick) ] + 1 or more spaces   
+// replaces spaces within inline code (surrounded by either one or two
+// back-ticks) with the \0x08 (backspace) character
+export function replaceSpacesInInlineCodeWithBs(txt: string): string {
+    return txt.replace(/`(`([^`]|`[^`])*`|.*?)`/g, (substr, ...args) => {
+        return substr.replace(/\s/g, "\x08"); // x08 is hex ascii code for the 'backspace' character
+    });  
+}
+
+// true if text is zero or more spaces + [ (1 or more digits + 1 decimal) OR (1 dash or asterisk) ] + 1 or more spaces   
 export function isListStart(text: string): RegExpMatchArray {
-    return text.match(/^\s*((\d+\.)|([-\*]))\s+/);        
+    return text.match(/^\s*((\d+\.)|([-\*]))(\s+)/);        
 }
 
 // line beginning + [zero or more spaces + 1 greater than sign](one-or-more)    
@@ -52,6 +60,10 @@ export function markdownBlockQuoteLevelFromString(text: string): number {
     return markdownBlockQuoteLevelFromRegExMatch(isBlockQuote(text));    
 }
 
+export function isFencedCodeBlockDelimiter(text: string): RegExpMatchArray {
+    return text.match(/^(\s*```)/);
+}
+
 export function getLineIndent(firstNonWhitespaceCharacterIndex: number, text: string): Indents {
     
     let startLnSpaces = " ".repeat(firstNonWhitespaceCharacterIndex);
@@ -68,7 +80,7 @@ export function getLineIndent(firstNonWhitespaceCharacterIndex: number, text: st
     regExMatches = isBlockQuote(text)
     if (regExMatches) {
         var level =  markdownBlockQuoteLevelFromRegExMatch(regExMatches);
-        var indent = "  " + ">".repeat(level) + " ";
+        var indent = startLnSpaces + "> ".repeat(level);
         return {
             firstLine: indent,
             otherLines: indent,

@@ -46,6 +46,11 @@
           "type": "boolean",
           "default": true,
           "description": "Preserve paragraph indent when reflowing lines."
+        },
+        "reflowMarkdown.doubleSpaceBetweenSentences": {
+          "type": "boolean",
+          "default": false,
+          "description": "Insert two spaces instead of one between each sentence."
         }
       }
     },

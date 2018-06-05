@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { replaceSpacesInLinkTextWithBs,
+         replaceSpacesInInlineCodeWithBs,
          Indents,
          StartEndInfo,
          getLineIndent,
@@ -9,6 +10,7 @@ import { replaceSpacesInLinkTextWithBs,
          isMarkdownHeadingHash,
          isMarkdownHeadingDash,
          markdownBlockQuoteLevelFromString,
+         isFencedCodeBlockDelimiter,
         } from "./testable";
 
 /* TODOS
@@ -26,6 +28,7 @@ export function reflow() {
     let wsConfig = vscode.workspace.getConfiguration("reflowMarkdown");
 
     let wrapAt = GetPreferredLineLength(wsConfig);
+    let spaceBetweenSentences = GetDoubleSpaceBetweenSentences(wsConfig) ? "  " : " ";
 
     const selection = editor.selection;
     const position = editor.selection.active;
@@ -35,6 +38,11 @@ export function reflow() {
     let len = editor.document.lineAt(sei.lineEnd).text.length;
     let range = new vscode.Range(sei.lineStart, 0, sei.lineEnd, len);
     let text = editor.document.getText(range);
+    let listStart = isListStart(text);
+    let spacesAfterListMarker = " ";
+    if (listStart) {
+        spacesAfterListMarker = listStart[4];
+    }
 
     // if we are in a blockQuote (or nested blockQuote), then remove the line-feeds and greater-than signs
     // a the beginning of each line and replace them with spaces.  we will restore them afterwards...
@@ -42,8 +50,8 @@ export function reflow() {
         text = text.replace(/(^|\n)\s*(>\s*)+/g, " ");
     }
 
-
     text = replaceSpacesInLinkTextWithBs(text);
+    text = replaceSpacesInInlineCodeWithBs(text);
 
     let words = text.split(/\s/);
 
@@ -51,8 +59,6 @@ export function reflow() {
     let curLine = sei.indents.firstLine;
     let curMaxLineLength = wrapAt;
 
- 
-    
     words.forEach((word, i) => {
         if (word !== "") {
 
@@ -64,7 +70,13 @@ export function reflow() {
                 curLine = sei.indents.otherLines;
             } 
             
-            curLine = curLine.concat(word).concat(" ");            
+            let spaces = " ";
+            if (listStart && i == 0) {
+                spaces = spacesAfterListMarker;
+            } else if (word.match(/[.!?]"?$/)) {
+                spaces = spaceBetweenSentences;
+            }
+            curLine = curLine.concat(word).concat(spaces);
         }
     });
 
@@ -87,6 +99,11 @@ export function reflow() {
 
     // replace \x08 (backspace) characters within link text (in square brackets) with spaces
     newParagraph = newParagraph.replace(/\[.*?\x08.*?]/g, (substr, ...args) => {
+        return substr.replace(/\x08/g, " "); // x08 is hex ascii code for the 'backspace' character
+    });
+
+    // replace \x08 (backspace) characters within inline code (surrounded by back-ticks) with spaces
+    newParagraph = newParagraph.replace(/`(`([^`]|`[^`])*`|.*?)`/g, (substr, ...args) => {
         return substr.replace(/\x08/g, " "); // x08 is hex ascii code for the 'backspace' character
     });
 
@@ -116,6 +133,10 @@ function GetPreferredLineLength(wsConfig: vscode.WorkspaceConfiguration): number
 
 function PreserveIndent(wsConfig: vscode.WorkspaceConfiguration): boolean {
     return wsConfig.get("preserveIndent", true);
+}
+
+function GetDoubleSpaceBetweenSentences(wsConfig: vscode.WorkspaceConfiguration): boolean {
+    return wsConfig.get("doubleSpaceBetweenSentences", false);
 }
 
 export function GetStartEndInfo(editor: vscode.TextEditor): StartEndInfo {
@@ -169,8 +190,13 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
         return midLine;
     }
 
-    // If the current line ends with two, spaces, it is an end point    
+    // If the prev line ends with two, spaces, it is an end point    
     if (prevLine.text.endsWith("  ")) {
+        return midLine;
+    }
+
+    // If the prev line delimits a fenced code block, this line is the start 
+    if (isFencedCodeBlockDelimiter(prevLine.text)) {
         return midLine;
     }
 
@@ -224,6 +250,11 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
         return midLine;
     }
 
+    // If the next line delimits a fenced code block, this line is the end 
+    if (isFencedCodeBlockDelimiter(nextLine.text)) {
+        return midLine;
+    }
+    
     // in [gitlab flavored] markdown, once blockQuotes nesting begins into a deeper level, it doesn't 
     // back out into a shallower level.  Therefore, the end is only when the nextLine level is greater than this line level.
     var bqLevelMid = markdownBlockQuoteLevelFromString(midLine.text);

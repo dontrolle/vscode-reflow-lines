@@ -4,6 +4,17 @@ Change Log
 (*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned)
 for releases but not guaranteed...)*
 
+1.5.0
+-----
+
+- Add `reflowMarkdown.doubleSpaceBetweenSentences` setting to insert two
+  spaces instead of one between sentences.
+- Don't split inline code spans onto separate lines.
+- Support fenced code blocks surrounded by three back-ticks (` ``` `)
+- Don't change the indentation level when reflowing blockquotes.
+- Within numbered and bulleted lists, keep the indentation before and the
+  number of spaces after a list marker unchanged.
+
 1.4.4
 -----
 

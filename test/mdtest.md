@@ -1,13 +1,15 @@
 mdtest.md
 =========
 
-This is a markdown file for testing the ReflowMarkdown extension and this first paragraph starts on line 4 and ends on line 7. Line 4 should be a
-paragraph start line, line 7 should be a paragraph end line, and lines 5 and 6
-should be neither because
-they are is in the middle.
+This is a markdown file for testing the ReflowMarkdown extension.  When ReflowMarkdown is applied it should discover that this first line is the 'start'
+and then it should discover that this line is a 'middle' line,
+and that this line is a 'middle' line too,
+as well as this one.
+This last line it should see as the 'end' line.  The start, middle, and end lines help it determine where to start and stop reflowing since we only want to reflow one 'paragraph' at a time.
 
-Sentences can end with either a period, a question mark, or an exclamation mark! Punctuation marks that appear within a "quotation should also end a sentence."
-If `reflowMarkdown.doubleSpaceBetweenSentences` is `true` then there should be two spaces between each sentence after reflow is applied.
+Identifying sentence endings is part of the logic too.  Normally a single space separates reflowed words but because some writing styles dictate two spaces after the end of a sentenace we want
+to follow the user's preference for this.    Sentenaces can end with a period, a question mark, or an exclamation mark! Punctuation marks that appear within a "quotation should also end a sentence."
+If `reflowMarkdown.doubleSpaceBetweenSentences` is `true` then there should be two spaces between each sentence after a reflow.
 
 BlockQuotes
 -----------
@@ -22,6 +24,9 @@ BlockQuotes
 > blockquotes,  The indentation that is used on the first line of the blockquote is used for the other lines in the blockquote.
 > > This is a blockquote nested
 > > inside of another blockquote.
+
+
+
 
 Number Lists
 ------------
@@ -63,7 +68,7 @@ the text following the list marker.
 1.  Numbered list with double spaces after list marker.  This format can be used to make sure the text following the list marker is always aligned even if the list contains 10 or more items.
 2.  This is the second list item and it is very long. When reflow is applied,
     the lines that follow the first line will all be indented such that they
-    start at the same place that the text starts fort on the first line, rather
+    start at the same place that the text starts on the first line, rather
     than starting right under the number.
 3.  This is the third list item.
 4.  This is the fourth list item.

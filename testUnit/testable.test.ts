@@ -1,6 +1,9 @@
 import * as mocha from 'mocha';
 import * as chai from 'chai';
-import { replaceSpacesInLinkTextWithBs, isListStart, isBlockQuote } from "../src/testable";
+import {    replaceSpacesInLinkTextWithBs, 
+            replaceSpacesInInlineCodeWithBs,
+            isListStart, 
+            isBlockQuote } from "../src/testable";
 
 
 // Recall:  Need these to force the require('mocha') and require('chai') calls in the transpiled code due to the way
@@ -19,7 +22,16 @@ suite("testable", () => {
             replaceSpacesInLinkTextWithBs("asdf [a b a] asdf" /**/).should.equal("asdf [a\x08b\x08a] asdf" /**/);
         })
     });
-    describe("isListStart", () =>{
+    describe("replaceSpacesInInlineCodeWithBs", () =>{
+        it("passes", () => {
+            replaceSpacesInInlineCodeWithBs("`abc`"       /**/).should.equal("`abc`"               /**/);
+            replaceSpacesInInlineCodeWithBs("`a b`"       /**/).should.equal("`a\x08b`"            /**/);
+            replaceSpacesInInlineCodeWithBs("``abc``"     /**/).should.equal("``abc``"             /**/);
+            replaceSpacesInInlineCodeWithBs("``a b``"     /**/).should.equal("``a\x08b``"          /**/);
+            replaceSpacesInInlineCodeWithBs("``a ` b``"   /**/).should.equal("``a\x08`\x08b``"     /**/);
+        })
+    });
+    describe("isListStart", () => {
         it("passes", () => {
             isListStart("1. ").should.exist;
             isListStart(" 1. ").should.exist;

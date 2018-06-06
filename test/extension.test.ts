@@ -1,5 +1,4 @@
 // <reference path="./mocha.d.ts" />
-// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 
 // Note: This example test is leveraging the Mocha test framework.
 // Please refer to their documentation on https://mochajs.org/ for help.

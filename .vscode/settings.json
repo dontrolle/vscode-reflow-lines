@@ -13,5 +13,10 @@
     "typescript.tsserver.log": "normal",
 
     //default terminal so tasks work
-    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe"
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+
+    "markdownlint.config": {
+        "MD013": true,
+        "MD029": false
+    }
 }

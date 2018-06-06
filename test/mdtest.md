@@ -111,8 +111,6 @@ Hyperlinks (multiple)
 Here is a similar paragraph to the one above but there are [multiple hyperlinks in it](http://www.somelonglink.com/a/b/c/1/2/3).
 The first line should not be wrapped but this one should because the link starts [after the max length](http://www.somelonglink.com/a/b/c/1/2/3).
 
-[Marvin.Henry], but after a few users adopted it for their various needs we wanted to migrate it to a more general [GitLab Group].
-
 Inline Code
 -----------
 

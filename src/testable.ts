@@ -37,7 +37,7 @@ export function getListStart(text: string): RegExpMatchArray {
 }
 
 // line beginning + [zero or more spaces + 1 greater than sign](one-or-more)    
-export function isBlockQuote(text: string): RegExpMatchArray {
+export function getBlockQuote(text: string): RegExpMatchArray {
     return text.match(/^(\s*>)+/);       
 }
 
@@ -57,7 +57,7 @@ export function isMarkdownHeadingDash(text: string): boolean {
 }
 
 export function markdownBlockQuoteLevelFromString(text: string): number {
-    return markdownBlockQuoteLevelFromRegExMatch(isBlockQuote(text));    
+    return markdownBlockQuoteLevelFromRegExMatch(getBlockQuote(text));    
 }
 
 export function isFencedCodeBlockDelimiter(text: string): RegExpMatchArray {
@@ -77,7 +77,7 @@ export function getLineIndent(firstNonWhitespaceCharacterIndex: number, text: st
         }
     }
     
-    regExMatches = isBlockQuote(text)
+    regExMatches = getBlockQuote(text)
     if (regExMatches) {
         var level =  markdownBlockQuoteLevelFromRegExMatch(regExMatches);
         var indent = startLnSpaces + "> ".repeat(level);

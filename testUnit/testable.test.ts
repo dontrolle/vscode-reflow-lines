@@ -3,7 +3,7 @@ import * as chai from 'chai';
 import {    replaceSpacesInLinkTextWithBs, 
             replaceSpacesInInlineCodeWithBs,
             getListStart, 
-            isBlockQuote } from "../src/testable";
+            getBlockQuote } from "../src/testable";
 
 
 // Recall:  Need these to force the require('mocha') and require('chai') calls in the transpiled code due to the way
@@ -58,20 +58,20 @@ suite("testable", () => {
         });
     });
     // line beginning + [zero or more spaces + 1 greater than sign](one-or-more) + 1 or more spaces    
-    describe("isBlockQuote", () =>{
+    describe("getBlockQuote", () =>{
         it("passes", () => {
-            isBlockQuote("> ").should.exist;
-            isBlockQuote(">> ").should.exist;
-            isBlockQuote(">>> ").should.exist;
-            isBlockQuote(" >").should.exist;
-            isBlockQuote(" >>").should.exist;
-            isBlockQuote(" >>>").should.exist;
-            isBlockQuote(" > ").should.exist;
-            isBlockQuote(" > > ").should.exist;
-            isBlockQuote(" > > >").should.exist;
-            isBlockQuote(" >  x").should.exist;      //multiple spaces....bad but still treat as blockquote for now    
-            isBlockQuote(" >  > ").should.exist;     //multiple spaces....bad but still treat as blockquote for now
-            isBlockQuote(" >  >  >").should.exist;   //multiple spaces....bad but still treat as blockquote for now  
+            getBlockQuote("> ").should.exist;
+            getBlockQuote(">> ").should.exist;
+            getBlockQuote(">>> ").should.exist;
+            getBlockQuote(" >").should.exist;
+            getBlockQuote(" >>").should.exist;
+            getBlockQuote(" >>>").should.exist;
+            getBlockQuote(" > ").should.exist;
+            getBlockQuote(" > > ").should.exist;
+            getBlockQuote(" > > >").should.exist;
+            getBlockQuote(" >  x").should.exist;      //multiple spaces....bad but still treat as blockquote for now    
+            getBlockQuote(" >  > ").should.exist;     //multiple spaces....bad but still treat as blockquote for now
+            getBlockQuote(" >  >  >").should.exist;   //multiple spaces....bad but still treat as blockquote for now  
         });
     });
 });

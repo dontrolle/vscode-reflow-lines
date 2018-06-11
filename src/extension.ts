@@ -10,7 +10,7 @@ import { replaceSpacesInLinkTextWithBs,
          isMarkdownHeadingHash,
          isMarkdownHeadingDash,
          markdownBlockQuoteLevelFromString,
-         isFencedCodeBlockDelimiter,
+         getFencedCodeBlockDelimiter,
         } from "./testable";
 
 /* TODOS
@@ -196,7 +196,7 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
     }
 
     // If the prev line delimits a fenced code block, this line is the start 
-    if (isFencedCodeBlockDelimiter(prevLine.text)) {
+    if (getFencedCodeBlockDelimiter(prevLine.text)) {
         return midLine;
     }
 
@@ -251,7 +251,7 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
     }
 
     // If the next line delimits a fenced code block, this line is the end 
-    if (isFencedCodeBlockDelimiter(nextLine.text)) {
+    if (getFencedCodeBlockDelimiter(nextLine.text)) {
         return midLine;
     }
     

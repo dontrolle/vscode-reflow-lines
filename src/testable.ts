@@ -60,7 +60,7 @@ export function markdownBlockQuoteLevelFromString(text: string): number {
     return markdownBlockQuoteLevelFromRegExMatch(getBlockQuote(text));    
 }
 
-export function isFencedCodeBlockDelimiter(text: string): RegExpMatchArray {
+export function getFencedCodeBlockDelimiter(text: string): RegExpMatchArray {
     return text.match(/^(\s*```)/);
 }
 

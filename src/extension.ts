@@ -4,7 +4,7 @@ import { replaceSpacesInLinkTextWithBs,
          Indents,
          StartEndInfo,
          getLineIndent,
-         isListStart,
+         getListStart,
          isBlockQuote,
          markdownBlockQuoteLevelFromRegExMatch,
          isMarkdownHeadingHash,
@@ -38,7 +38,7 @@ export function reflow() {
     let len = editor.document.lineAt(sei.lineEnd).text.length;
     let range = new vscode.Range(sei.lineStart, 0, sei.lineEnd, len);
     let text = editor.document.getText(range);
-    let listStart = isListStart(text);
+    let listStart = getListStart(text);
     let spacesAfterListMarker = " ";
     if (listStart) {
         spacesAfterListMarker = listStart[4];
@@ -174,7 +174,7 @@ function GetStartLine(editor: vscode.TextEditor, midLine: vscode.TextLine): vsco
         return midLine;
     }
 
-    if (isListStart(midLine.text)) {
+    if (getListStart(midLine.text)) {
         return midLine;
     }
 
@@ -246,7 +246,7 @@ function GetEndLine(editor: vscode.TextEditor, midLine: vscode.TextLine, maxLine
     }
 
     // if the next line starts a list, this line is the end
-    if (isListStart(nextLine.text)) {
+    if (getListStart(nextLine.text)) {
         return midLine;
     }
 

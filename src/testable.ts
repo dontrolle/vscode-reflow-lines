@@ -32,7 +32,7 @@ export function replaceSpacesInInlineCodeWithBs(txt: string): string {
 }
 
 // true if text is zero or more spaces + [ (1 or more digits + 1 decimal) OR (1 dash or asterisk) ] + 1 or more spaces   
-export function isListStart(text: string): RegExpMatchArray {
+export function getListStart(text: string): RegExpMatchArray {
     return text.match(/^\s*((\d+\.)|([-\*]))(\s+)/);        
 }
 
@@ -68,7 +68,7 @@ export function getLineIndent(firstNonWhitespaceCharacterIndex: number, text: st
     
     let startLnSpaces = " ".repeat(firstNonWhitespaceCharacterIndex);
 
-    let regExMatches = isListStart(text);
+    let regExMatches = getListStart(text);
     if (regExMatches) {        
         return {
             firstLine: startLnSpaces,

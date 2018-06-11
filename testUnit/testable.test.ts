@@ -2,7 +2,7 @@ import * as mocha from 'mocha';
 import * as chai from 'chai';
 import {    replaceSpacesInLinkTextWithBs, 
             replaceSpacesInInlineCodeWithBs,
-            isListStart, 
+            getListStart, 
             isBlockQuote } from "../src/testable";
 
 
@@ -31,30 +31,30 @@ suite("testable", () => {
             replaceSpacesInInlineCodeWithBs("``a ` b``"   /**/).should.equal("``a\x08`\x08b``"     /**/);
         })
     });
-    describe("isListStart", () => {
+    describe("getListStart", () => {
         it("passes", () => {
-            isListStart("1. ").should.exist;
-            isListStart(" 1. ").should.exist;
-            isListStart("  1. ").should.exist;
-            isListStart("99. ").should.exist;
-            isListStart(" 99. ").should.exist;
-            isListStart("  99. ").should.exist;
-            isListStart("* ").should.exist;
-            isListStart("* abc").should.exist;
-            isListStart("*  ").should.exist;
-            isListStart("*  abc").should.exist;
-            isListStart("- ").should.exist;
-            isListStart("- abc").should.exist;
-            isListStart("-  ").should.exist;
-            isListStart("-  abc").should.exist;
-            should.not.exist(isListStart("  1."));
-            should.not.exist(isListStart("  1.abc"));
-            should.not.exist(isListStart("  99."));
-            should.not.exist(isListStart("  99.abc"));
-            should.not.exist(isListStart("*"));
-            should.not.exist(isListStart("*abc"));
-            should.not.exist(isListStart("-"));
-            should.not.exist(isListStart("-abc"));
+            getListStart("1. ").should.exist;
+            getListStart(" 1. ").should.exist;
+            getListStart("  1. ").should.exist;
+            getListStart("99. ").should.exist;
+            getListStart(" 99. ").should.exist;
+            getListStart("  99. ").should.exist;
+            getListStart("* ").should.exist;
+            getListStart("* abc").should.exist;
+            getListStart("*  ").should.exist;
+            getListStart("*  abc").should.exist;
+            getListStart("- ").should.exist;
+            getListStart("- abc").should.exist;
+            getListStart("-  ").should.exist;
+            getListStart("-  abc").should.exist;
+            should.not.exist(getListStart("  1."));
+            should.not.exist(getListStart("  1.abc"));
+            should.not.exist(getListStart("  99."));
+            should.not.exist(getListStart("  99.abc"));
+            should.not.exist(getListStart("*"));
+            should.not.exist(getListStart("*abc"));
+            should.not.exist(getListStart("-"));
+            should.not.exist(getListStart("-abc"));
         });
     });
     // line beginning + [zero or more spaces + 1 greater than sign](one-or-more) + 1 or more spaces    

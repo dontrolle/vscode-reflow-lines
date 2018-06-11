@@ -32,16 +32,16 @@ export function replaceSpacesInInlineCodeWithBs(txt: string): string {
 }
 
 // true if text is zero or more spaces + [ (1 or more digits + 1 decimal) OR (1 dash or asterisk) ] + 1 or more spaces   
-export function getListStart(text: string): RegExpMatchArray {
+export function getListStart(text: string): RegExpMatchArray | null {
     return text.match(/^\s*((\d+\.)|([-\*]))(\s+)/);        
 }
 
 // line beginning + [zero or more spaces + 1 greater than sign](one-or-more)    
-export function getBlockQuote(text: string): RegExpMatchArray {
+export function getBlockQuote(text: string): RegExpMatchArray | null {
     return text.match(/^(\s*>)+/);       
 }
 
-export function markdownBlockQuoteLevelFromRegExMatch(matchArray: RegExpMatchArray): number {
+export function markdownBlockQuoteLevelFromRegExMatch(matchArray: RegExpMatchArray | null): number {
     if (matchArray && matchArray.length)
         return matchArray[0].replace(/\s/g, "").length
     else
@@ -60,7 +60,7 @@ export function markdownBlockQuoteLevelFromString(text: string): number {
     return markdownBlockQuoteLevelFromRegExMatch(getBlockQuote(text));    
 }
 
-export function getFencedCodeBlockDelimiter(text: string): RegExpMatchArray {
+export function getFencedCodeBlockDelimiter(text: string): RegExpMatchArray | null {
     return text.match(/^(\s*```)/);
 }
 

@@ -4,11 +4,33 @@ Change Log
 (*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned)
 for releases but not guaranteed...)*
 
+2.0.0
+-----
+
+- Alot of changes/refactoring in here so bumping the major version to let
+  everyone know there *may* be breakages.  Particularly in regards to links
+  reflowing or not reflowing they same as before.  Sorry for the uncertainty
+  here.
+- Fixed [#2](https://github.com/marvhen/ReflowMarkdown/pull/2)
+- Added the [reflowMarkdown.resizeHeaderDashLines](README.md#Extension-Settings)
+  setting
+- Major refactoring to make the code more testable.
+- Created a before/after testing scheme.  The befor.md file contains example
+  of markdown prior to being reflowed and the after.md file has the same
+  content reflowed.  The *getReflowedText_compare_before_and_after* test does a
+  reflow on all the lines in befor.md and compares the result to the lines in
+  after.md.  This tells us as changes are made to the code whether we broke
+  anything.  Still not sure if this counts as a unit test or if its more of an
+  integration test.  It runs under mocha without the need of vscode running
+  however so that is a plus.
+- Removed the `preserveIndent` setting as there was no logic actually
+  implementing any behavior different from when it was set or unset.
+
 1.5.0
 -----
 
-- Add `reflowMarkdown.doubleSpaceBetweenSentences` setting to insert two
-  spaces instead of one between sentences.
+- Added the [reflowMarkdown.doubleSpaceBetweenSentences](README.md#Extension-Settings)
+  setting to insert two spaces instead of one between sentences.
 - Don't split inline code spans onto separate lines.
 - Support fenced code blocks surrounded by three back-ticks (` ``` `)
 - Don't change the indentation level when reflowing blockquotes.

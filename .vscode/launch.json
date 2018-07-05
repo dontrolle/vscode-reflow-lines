@@ -8,8 +8,7 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-         // "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
-            "args": ["${workspaceRoot}/test/mdtest.md", "--extensionDevelopmentPath=${workspaceRoot}" ],
+            "args": ["${workspaceRoot}/testUnit", "--extensionDevelopmentPath=${workspaceRoot}" ],
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles":[

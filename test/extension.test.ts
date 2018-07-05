@@ -15,46 +15,7 @@ import * as chai from 'chai';
 let assert = chai.assert;
 
 
-// NOTE: Lines are 0 based from the editors perspective, so we minus 1 so our
-//       test output makes sense when we look at mdtest.md.
 
-// Defines a Mocha test suite to group tests of similar kind together
-// suite("#IsParagraphStart", () => {
-
-//     test("should return true for lines 1, 2, 3, 4, 8, and 9", () => {
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 1-1), true);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 2-1), true);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 3-1), true);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 4-1), true);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 8-1), true);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 9-1), true);
-//     });
-//     test("should return false for lines 5 and 6", () => {
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 5-1), false);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 6-1), false);
-//         assert.equal(myExtension.IsParagraphStart(vscode.window.activeTextEditor, 7-1), false);
-//     });
-
-// });
-
-// suite("#IsParagraphEnd", () => {
-        
-//     test("should return true for lines 1, 2, 3, 7, 8, and 9", () => {
-        
-//        assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 1-1), true);
-//        assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 2-1), true);
-//        assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 3-1), true);
-//        assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 7-1), true);
-//        assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 8-1), true);
-//        assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 9-1), true);
-//     });
-//     test("should return false for lines 4, 5, 6, and 8", () => {
-//         assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 4-1), false);
-//         assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 5-1), false);
-//         assert.equal(myExtension.IsParagraphEnd(vscode.window.activeTextEditor, 6-1), false);
-//     });
-
-// });
 
 let setDocText = (txt: string) => {
     return vscode.window.activeTextEditor.edit((tee: vscode.TextEditorEdit) => {
@@ -69,33 +30,9 @@ let setDocText = (txt: string) => {
 
 
 
-suite("mytests", () => {
+suite("integrationTests", () => {
  
-  test("#mytest", () => {
-    setDocText(`This is a single line of markdown text which is longer than the default preferredLineLength of 80 characters.`)
-    .then(success => {
-        myExtension.reflow()
-        .then(success => {
-            assert.equal(vscode.window.activeTextEditor.document.lineAt(0).text, 
-            `This is a single line of markdown text which is longer than the default`,
-            'Unexpected Result!');
-            // assert.equal(vscode.window.activeTextEditor.document.lineAt(1).text, 
-            // `preferredLineLength of 80 characters. `,
-            // 'Unexpected Result!');
-        })
-    })
-  });
 
-// needs work
-//   test("gotoLine", () => {
-//      setDocText(`This is not one,
-//not two,
-//not three,
-//but four lines of text.`).then(success => {
-//         testable.goToLine(vscode.window.activeTextEditor, vscode.Selection, vscode.Selection, 4, true);
-//         assert.equal(vscode.window.activeTextEditor.selection.anchor.line, 4);
-//      });
-//   });
 
 
 });

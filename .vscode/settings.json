@@ -15,8 +15,10 @@
     //default terminal so tasks work
     "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
 
-    "markdownlint.config": {
-        "MD013": true,
-        "MD029": false
+    "markdownlint.ignore": [
+     "**/*"   
+    ],
+    "[markdown]": {
+        "editor.wordWrap": "off"
     }
 }

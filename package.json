@@ -2,7 +2,7 @@
   "name": "reflow-markdown",
   "displayName": "Reflow Markdown",
   "description": "Format lines in markdown headers, paragraphs, blockquotes, lists, etc. to a preferred line-length.",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "publisher": "marvhen",
   "icon": "img/logo.png",
   "license": "MIT",
@@ -42,15 +42,15 @@
           "description": "Preferred line length for reflowed lines.",
           "minimum": 0
         },
-        "reflowMarkdown.preserveIndent": {
-          "type": "boolean",
-          "default": true,
-          "description": "Preserve paragraph indent when reflowing lines."
-        },
         "reflowMarkdown.doubleSpaceBetweenSentences": {
           "type": "boolean",
           "default": false,
           "description": "Insert two spaces instead of one between each sentence."
+        },
+        "reflowMarkdown.resizeHeaderDashLines": {
+          "type": "boolean",
+          "default": false,
+          "description": "The dashes and equal signs under headers will be re-written to be the same length as the header text."
         }
       }
     },
@@ -73,7 +73,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "mocha ./out/testUnit/",
-    "testAndWatch": "mocha --watch --watch-extensions js ./out/testUnit/",
+    "testAndWatch": "mocha --watch --watch-extensions js,md ./out/testUnit/",
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {

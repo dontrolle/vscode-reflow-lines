@@ -36,7 +36,7 @@ export interface Settings  {
 }
 
 
-// This allows us to NOT wrap an inline link if  a minimum amount of space remaining
+// This allows us to NOT wrap an inline link if a minimum amount of space remaining
 // is available at the end of a line.  For now this minimum is just 1 character which means
 // the line length is LESS THAN the PreferredLineLength.  An envisioned enhancement is to make this 
 // minimum amount somewhat configurable.  For example some may want to try to fit all of the

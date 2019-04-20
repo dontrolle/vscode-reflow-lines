@@ -121,6 +121,7 @@ suite("testable", () => {
                settings.preferredLineLength         /**/ = modifications.settings.preferredLineLength         /**/ == undefined ? settings.preferredLineLength         /**/ : modifications.settings.preferredLineLength;         
                settings.doubleSpaceBetweenSentences /**/ = modifications.settings.doubleSpaceBetweenSentences /**/ == undefined ? settings.doubleSpaceBetweenSentences /**/ : modifications.settings.doubleSpaceBetweenSentences;
                settings.resizeHeaderDashLines       /**/ = modifications.settings.resizeHeaderDashLines       /**/ == undefined ? settings.resizeHeaderDashLines       /**/ : modifications.settings.resizeHeaderDashLines;
+               settings.wrapLongLinks               /**/ = modifications.settings.wrapLongLinks               /**/ == undefined ? settings.wrapLongLinks               /**/ : modifications.settings.wrapLongLinks;
             };
 
             let nextAfterLineToTest = 0;

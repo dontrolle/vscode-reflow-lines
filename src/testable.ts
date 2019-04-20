@@ -3,7 +3,6 @@ import { TextEditor, Selection, Position, TextLine, WorkspaceConfiguration } fro
 
 const HYPERLINK_REGEX = /\[.*?\]/g;
 
- 
 export interface Indents {
     firstLine: string;
     otherLines: string;
@@ -29,30 +28,34 @@ export interface StartEndInfo {
     otherInfo: OtherInfo;
 }
 
+enum wrapLongLinksOptions {
+    wrap = "wrap",
+    doNotWrap = "doNotWrap"
+}
 export interface Settings  {
     preferredLineLength: number, 
     doubleSpaceBetweenSentences: boolean,
-    resizeHeaderDashLines: boolean
+    resizeHeaderDashLines: boolean,
+    wrapLongLinks: wrapLongLinksOptions
 }
 
+const DEFAULTSETTINGS : Settings = {
+    preferredLineLength: 80,
+    doubleSpaceBetweenSentences: false,
+    resizeHeaderDashLines: true,
+    wrapLongLinks: wrapLongLinksOptions.wrap
+};
 
-// This allows us to NOT wrap an inline link if a minimum amount of space remaining
-// is available at the end of a line.  For now this minimum is just 1 character which means
-// the line length is LESS THAN the PreferredLineLength.  An envisioned enhancement is to make this 
-// minimum amount somewhat configurable.  For example some may want to try to fit all of the
-// the link text inside the []'s within the PreferredLineLength.  
-export function wordIsLinkAndMinimumSpaceIsAvailable(word: string, line: string, wrapAt: number): boolean {
-    let match = word.match(HYPERLINK_REGEX);
-    if (match) {
-        // 1 character (link will definitely extend beyod PreferredLineLength)
-        return line.length < wrapAt;
-    } else {
-        return false;
-    }
+export function wordIsLink(word: string) {
+    return word.match(HYPERLINK_REGEX);
 }
 
 export function lineTooLong(line: string, wrapAt: number): boolean {
     return line.length > wrapAt;
+}
+
+export function entireWordByItselfTooLong(word: string, wrapAt: number): boolean {
+    return !wordIsLink(word) && lineTooLong(word, wrapAt);
 }
 
 export function lineIsSentenceEnd(line: string): RegExpMatchArray | null {
@@ -171,8 +174,7 @@ export function goToLine(activeTextEditor: TextEditor,
     activeTextEditor.revealRange(range);
 }
 
-// these are just aliases for readability
-let entireWordByItselfTooLong = lineTooLong;
+// is is just an alias for readability
 let lineBeingBuiltAlreadyTooLong = lineTooLong;
 
 
@@ -200,6 +202,7 @@ export function getReflowedText(sei: StartEndInfo, text: string, settings: Setti
     words.forEach((word, i) => {
 
         if (word !== "") {
+            var lineBeingBuiltWithSpacesAndWord = lineBeingBuilt.concat(spaces).concat(word);
 
             // if the previous iteration determined we are ready to add the line then do that first
             if (lineToPush) {
@@ -223,17 +226,20 @@ export function getReflowedText(sei: StartEndInfo, text: string, settings: Setti
             } else if (lineBeingBuiltAlreadyTooLong(lineBeingBuilt, settings.preferredLineLength)) {
                 lineToPush = lineBeingBuilt; 
                 lineBeingBuilt = sei.otherInfo.indents.otherLines.concat(word);
-            } else {
-                var lineWithSpacesAndWord = lineBeingBuilt.concat(spaces).concat(word);
-                
-                if (wordIsLinkAndMinimumSpaceIsAvailable(word, lineBeingBuilt, settings.preferredLineLength)) {
-                    lineBeingBuilt = lineWithSpacesAndWord;
-                } else if (lineTooLong(lineWithSpacesAndWord, settings.preferredLineLength)) {
+            } else if (wordIsLink(word)) {
+                if (lineBeingBuiltWithSpacesAndWord.length < settings.preferredLineLength) {
+                    lineBeingBuilt = lineBeingBuiltWithSpacesAndWord
+                } else if (settings.wrapLongLinks == wrapLongLinksOptions.doNotWrap) {
+                    lineBeingBuilt = lineBeingBuiltWithSpacesAndWord
+                } else  { //settings.wrapLongLinks == wrapHyperlinksOptions.wrap
                     lineToPush = lineBeingBuilt; 
                     lineBeingBuilt = sei.otherInfo.indents.otherLines.concat(word);
-                } else {
-                    lineBeingBuilt = lineWithSpacesAndWord;
                 }
+            } else if (lineTooLong(lineBeingBuiltWithSpacesAndWord, settings.preferredLineLength)) {
+                lineToPush = lineBeingBuilt; 
+                lineBeingBuilt = sei.otherInfo.indents.otherLines.concat(word);
+            } else {
+                lineBeingBuilt = lineBeingBuiltWithSpacesAndWord;
             }
 
             // determine how many spaces will separate this word and the next
@@ -406,15 +412,12 @@ export function getEndLine(lineAtFunc: (line: number) => TextLine, midLine: Text
 export function getSettings(wsConfig?: WorkspaceConfiguration): Settings {
     if (wsConfig) {
         return {
-            preferredLineLength: wsConfig.get("preferredLineLength", 80),
-            doubleSpaceBetweenSentences: wsConfig.get("doubleSpaceBetweenSentences", false),
-            resizeHeaderDashLines: wsConfig.get("resizeHeaderDashLines", true)
+            preferredLineLength: wsConfig.get("preferredLineLength", DEFAULTSETTINGS.preferredLineLength),
+            doubleSpaceBetweenSentences: wsConfig.get("doubleSpaceBetweenSentences", DEFAULTSETTINGS.doubleSpaceBetweenSentences),
+            resizeHeaderDashLines: wsConfig.get("resizeHeaderDashLines", DEFAULTSETTINGS.resizeHeaderDashLines),
+            wrapLongLinks: wsConfig.get("wrapLongLinks", DEFAULTSETTINGS.wrapLongLinks)
         }
     } else {
-        return {
-            preferredLineLength: 80,
-            doubleSpaceBetweenSentences: false,
-            resizeHeaderDashLines: true
-        }
+        return DEFAULTSETTINGS;
     }
 }

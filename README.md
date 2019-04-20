@@ -30,6 +30,9 @@ This extension contributes the following settings:
   ==='s under H1s and H2s to be the same length as the header text.  If the
   header text spans multiple lines, the dashes are set to be the length of the
   longest line.
+
+- `reflowMarkdown.wrapLongLinks`: Specifies how links will be wrapped when they
+  cause a line to extend beyond the preferred length.
   
 Keyboard Shortcuts
 ------------------

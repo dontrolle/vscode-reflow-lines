@@ -1,4 +1,4 @@
-`{"settings": {"preferredLineLength":80, "doubleSpaceBetweenSentences": true, "resizeHeaderDashLines": true}}`
+`{"settings": {"preferredLineLength":80, "doubleSpaceBetweenSentences": true, "resizeHeaderDashLines": true, "wrapLongLinks":"wrap"}}`
 
 This markdown file is used by the getReflowedText_compare_before_and_after unit test.  The test reads the *befor.md* file and iteratively
 performs a reflow operation on all lines it finds and compares each result to the corresponding lines in the *after.md* file.
@@ -40,5 +40,7 @@ and I said "awesome!"    You may ask "does it work when a sentence ends like thi
 [This line ends is a very long link/url and it does not get reflowed to the next line](http://some-long-url.blah.blah?q=abcdefghijklmnopqrstuvwxyz)
 
 This [line ends with a very long link/url and it reflows to the next line but then it doesn't wrap anymore after that.](http://some-long-url.blah.blah?q=abcdefghijklmnopqrstuvwxyz)
-I'm not sure this is the best way this should work however because
-it's not a very good use of the empty space after 'This'.
+
+`{"settings": {"wrapLongLinks":"doNotWrap" }}`
+
+This [line ends with a very long link/url and it does not reflow to the next line because we have wrapLongLinks set to doNotWrap](http://some-long-url.blah.blah?q=abcdefghijklmnopqrstuvwxyz)

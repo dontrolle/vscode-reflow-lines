@@ -51,6 +51,19 @@
           "type": "boolean",
           "default": false,
           "description": "The dashes and equal signs under headers will be re-written to be the same length as the header text."
+        },
+        "reflowMarkdown.wrapLongLinks": {
+          "type": "string",
+          "default": "wrap",
+          "description": "Specifies how links will be wrapped when they in the middle of a line and cause it to extend beyond the preferred length.",
+          "enum":[
+            "wrap",
+            "doNotWrap"
+          ],
+          "enumDescriptions":[
+            "The link text and the link url are started on the next line, which itself may be longer than the preferrd length.",
+            "The link text and the link url are kept on the current line, resulting in it being longer than the preferred length."
+          ]
         }
       }
     },

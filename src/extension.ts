@@ -1,20 +1,9 @@
 import * as vscode from "vscode";
-import { replaceSpacesInLinkTextWithBs,
-         replaceSpacesInInlineCodeWithBs,
-         Indents,
-         StartEndInfo,
+import { StartEndInfo,
          getLineIndent,
-         getListStart,
-         getBlockQuote,
-         markdownBlockQuoteLevelFromRegExMatch,
-         isMarkdownHeadingHash,
-         isMarkdownHeadingDash,
-         markdownBlockQuoteLevelFromString,
-         getFencedCodeBlockDelimiter,
          getReflowedText,
          getStartLine,
          getEndLine,
-         removeBlockQuoteFormatting,
          Settings,
          OtherInfo
         } from "./testable";

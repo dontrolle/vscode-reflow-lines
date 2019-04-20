@@ -4,10 +4,18 @@ Change Log
 (*[semantic versioning](https://semver.org/) [ambitioned](http://www.dictionary.com/browse/ambitioned)
 for releases but not guaranteed...)*
 
+2.1.0
+-----
+
+- Added the [reflowMarkdown.wrapLongLinks](README.md#Extension-Settings)
+  setting.
+- Bumped the minor version number per semver to indicate features were added in
+  a backwards-compatible way.
+
 2.0.0
 -----
 
-- Alot of changes/refactoring in here so bumping the major version to let
+- A lot of changes/refactoring in here so bumping the major version to let
   everyone know there *may* be breakages.  Particularly in regards to links
   reflowing or not reflowing they same as before.  Sorry for the uncertainty
   here.

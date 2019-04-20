@@ -2,7 +2,7 @@
   "name": "reflow-markdown",
   "displayName": "Reflow Markdown",
   "description": "Format lines in markdown headers, paragraphs, blockquotes, lists, etc. to a preferred line-length.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "publisher": "marvhen",
   "icon": "img/logo.png",
   "license": "MIT",
@@ -56,11 +56,11 @@
           "type": "string",
           "default": "wrap",
           "description": "Specifies how links will be wrapped when they in the middle of a line and cause it to extend beyond the preferred length.",
-          "enum":[
+          "enum": [
             "wrap",
             "doNotWrap"
           ],
-          "enumDescriptions":[
+          "enumDescriptions": [
             "The link text and the link url are started on the next line, which itself may be longer than the preferrd length.",
             "The link text and the link url are kept on the current line, resulting in it being longer than the preferred length."
           ]
@@ -92,7 +92,7 @@
   "devDependencies": {
     "@types/chai": "^4.1.2",
     "@types/mocha": "5.0.0",
-    "@types/node": "^7.0.43",
+    "@types/node": "^7.0.61",
     "chai": "4.1.2",
     "mocha": "5.1.0",
     "typescript": "2.8.1",

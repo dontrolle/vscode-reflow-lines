@@ -7,11 +7,11 @@ import {    replaceSpacesInLinkTextWithBs,
             lineTooLong,
             getReflowedText,
             StartEndInfo,
-            wordIsLinkAndMinimumSpaceIsAvailable,
             getLineIndent,
             getStartLine,
             getEndLine,
             Settings,
+            getSettings,
             OtherInfo
         } from "../src/testable";
 import { GetStartEndInfo, reflow } from '../src/extension';
@@ -115,12 +115,7 @@ suite("testable", () => {
                 expect(linesAfter.length).to.be.greaterThan(0);
             }
 
-            let settings: Settings = {
-                preferredLineLength:80, 
-                doubleSpaceBetweenSentences: false,
-                resizeHeaderDashLines: true
-            }
-            
+            let settings: Settings = getSettings();
             let updateSettings = (settingsLine: string) => {
                let modifications = JSON.parse(settingsLine.replace(/`/g, ""));
                settings.preferredLineLength         /**/ = modifications.settings.preferredLineLength         /**/ == undefined ? settings.preferredLineLength         /**/ : modifications.settings.preferredLineLength;         

@@ -4,7 +4,7 @@ import { StartEndInfo,
          getReflowedText,
          getStartLine,
          getEndLine,
-         Settings,
+         getSettings,
          OtherInfo
         } from "./testable";
 
@@ -44,15 +44,6 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
-}
-
-//FIX--create a testable function to return the default values
-function getSettings(wsConfig: vscode.WorkspaceConfiguration): Settings {
-    return {
-        preferredLineLength: wsConfig.get("preferredLineLength", 80),
-        doubleSpaceBetweenSentences: wsConfig.get("doubleSpaceBetweenSentences", false),
-        resizeHeaderDashLines: wsConfig.get("resizeHeaderDashLines", true)
-    }
 }
 
 export function GetStartEndInfo(editor: vscode.TextEditor): StartEndInfo {

@@ -1,4 +1,4 @@
-import { TextEditor, Selection, Position, TextLine } from "vscode";
+import { TextEditor, Selection, Position, TextLine, WorkspaceConfiguration } from "vscode";
 
 
 const HYPERLINK_REGEX = /\[.*?\]/g;
@@ -400,4 +400,21 @@ export function getEndLine(lineAtFunc: (line: number) => TextLine, midLine: Text
     }
 
     return getEndLine(lineAtFunc, lineAtFunc(midLine.lineNumber + 1), maxLineNum, o);
+}
+
+// returns the settings from the specified config or the defaults if wsConfig is null
+export function getSettings(wsConfig?: WorkspaceConfiguration): Settings {
+    if (wsConfig) {
+        return {
+            preferredLineLength: wsConfig.get("preferredLineLength", 80),
+            doubleSpaceBetweenSentences: wsConfig.get("doubleSpaceBetweenSentences", false),
+            resizeHeaderDashLines: wsConfig.get("resizeHeaderDashLines", true)
+        }
+    } else {
+        return {
+            preferredLineLength: 80,
+            doubleSpaceBetweenSentences: false,
+            resizeHeaderDashLines: true
+        }
+    }
 }

@@ -1,13 +1,11 @@
 `{"settings": {"preferredLineLength":80, "doubleSpaceBetweenSentences": true, "resizeHeaderDashLines": true}}`
 
-This markdown file is used by the getReflowedText unit (er...integration?) test.  The test reads this file and iteratively
-performs a reflow operation on all lines it finds and compares each result to the corresponding lines of text that the after.md
-file.  The very first line in this file is special in that it specifies the settings for the extension via an inline code block of JSON.
-Similar lines occur further down in the file and when each of these lines is encountered the settings are modified and the new settings are used
-for reflowing until another settings line is encountered. As changes to the code are made, this method of testing will tell us if
-we have made any changes that cause the before and after paragraphs to no longer match.  This file begins
-with 2 special paragraphs that define the settings that will be used from that point forward.  As tests
-are needed for other settings, you will similar paragraphs that modify the settings to be used.
+This markdown file is used by the getReflowedText_compare_before_and_after unit test.  The test reads the *befor.md* file and iteratively
+performs a reflow operation on all lines it finds and compares each result to the corresponding lines in the *after.md* file.
+The very first line in this file is a special *settings* line that specifies the ReflowMarkdown extension settings via an inline code block of JSON.
+Similar lines occur further down in the file and when each is encountered the specified settings are merged in and used
+for reflowing until another *settings* line is encountered. As changes to the code are made, this method of testing will tell us if
+we have made any changes that cause the before and after paragraphs to no longer match.
 
 This is a Header Made Using Equals Signs
 ========================================
